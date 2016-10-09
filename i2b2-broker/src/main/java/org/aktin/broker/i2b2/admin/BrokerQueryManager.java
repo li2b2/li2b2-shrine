@@ -23,6 +23,7 @@ public class BrokerQueryManager implements QueryManager {
 	private static final String MEDIA_TYPE_I2B2_RESULT_OUTPUT_LIST = "text/vnd.i2b2.result-output-list";
 //	private static final String MEDIA_TYPE_I2B2_RESULT_OUTPUT_LIST = "text/vnd.i2b2.result-output-list+xml";
 //	private static final String MEDIA_TYPE_I2B2_RESULT_ENVELOPE = "text/vnd.i2b2.result-envelope+xml";
+	// TODO directly use the BrokerBackend without the local HTTP layer
 	private BrokerAdmin broker;
 	
 	public BrokerQueryManager(URI brokerEndpoint) {

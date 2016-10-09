@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
+import org.aktin.broker.xml.Node;
 import org.aktin.broker.xml.RequestStatusInfo;
 
 import de.sekmi.li2b2.api.crc.Query;
@@ -55,7 +56,22 @@ public class BrokerI2b2Execution implements QueryExecution{
 
 	@Override
 	public String getLabel() {
-		return "Node "+status.node;
+		// try to retrieve info about the node
+		String label = null;
+		Node node;
+		try {
+			node = query.broker.getNode(status.node);
+		} catch (IOException e) {
+			// TODO log warning
+			node = null;
+		}
+		if( node != null && node.clientDN != null ){
+			label = node.getCommonName();
+		}
+		if( label == null ){
+			label = "Node "+status.node;
+		}
+		return label;
 	}
 
 	@Override
