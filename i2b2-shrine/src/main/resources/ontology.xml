@@ -1,0 +1,19 @@
+<ontology>
+	<concept key="aktin">
+		<name>AKTIN</name>
+		<!-- narrower without concepts indicates an empty folder -->
+		<narrower/>
+	</concept>
+	<concept key="example">
+		<name>Beispiel</name>
+		<narrower>
+			<concept key="examplesub">
+				<name>Sub</name>
+				<!-- no narrower element indicates leaf -->
+			</concept>
+			<concept key="usw">
+				<name>Und so weiter</name>
+			</concept>
+		</narrower>
+	</concept>
+</ontology>

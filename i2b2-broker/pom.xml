@@ -1,0 +1,46 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<name>AKTIN : SHRINE : i2b2 Service Backend</name>
+
+	<groupId>org.aktin.shrine</groupId>
+	<artifactId>i2b2-broker</artifactId>
+	<version>0.1-SNAPSHOT</version>
+
+	<description>
+		Exposes i2b2 webservice APIs to distribute
+		queries via an AKTIN SHRINE broker.
+
+		This application cannot be run on its own
+		and requires an application server also
+		running the li2b2 server.
+	</description>
+	
+	
+	<parent>
+		<groupId>org.aktin</groupId>
+		<artifactId>ashrine</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+	
+  
+	<build>
+		<plugins>
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>de.sekmi.li2b2</groupId>
+			<artifactId>li2b2-api</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aktin</groupId>
+			<artifactId>broker-client</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+</project>
