@@ -32,18 +32,18 @@ public class CurrentFeedbackExecution implements QueryExecution, QueryResult{
 	}
 
 	private void fillBreakdown(int knownNodes, List<RequestStatusInfo> statusList){
-		int unknowing = knownNodes - statusList.size();
+		int unaware = knownNodes - statusList.size();
 		// count 
 		int counts[] = new int[RequestStatus.values().length];
 		for( RequestStatusInfo info : statusList ){
 			RequestStatus status = info.getStatus();
 			if( status == null ){
-				unknowing ++;
+				unaware ++;
 			}else{
 				counts[status.ordinal()] ++;
 			}
 		}
-		breakdown.put("unknowing", unknowing);
+		breakdown.put("unaware", unaware);
 		for( int i=0; i<counts.length; i++ ){
 			breakdown.put(RequestStatus.values()[i].toString(), counts[i]);
 		}
