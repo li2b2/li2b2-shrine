@@ -1,5 +1,7 @@
 package org.aktin.broker.i2b2.standalone;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.URI;
@@ -9,7 +11,6 @@ import javax.sql.DataSource;
 
 import org.aktin.broker.AggregatorEndpoint;
 import org.aktin.broker.BrokerEndpoint;
-import org.aktin.broker.auth.AuthFilterSSLHeaders;
 import org.aktin.broker.db.LiquibaseWrapper;
 import org.aktin.broker.i2b2.admin.BrokerQueryManager;
 import org.aktin.broker.i2b2.standalone.db.HSQLDataSource;
@@ -29,7 +30,6 @@ import de.sekmi.li2b2.services.Webclient;
 import de.sekmi.li2b2.services.WorkplaceService;
 import de.sekmi.li2b2.services.impl.OntologyImpl;
 import de.sekmi.li2b2.services.impl.ProjectManagerImpl;
-import liquibase.exception.DatabaseException;
 import liquibase.exception.LiquibaseException;
 
 public class HttpServer {
@@ -40,13 +40,15 @@ public class HttpServer {
 	private ProjectManager pm;
 	private Ontology ont;
 	
-	public HttpServer() throws SQLException{
+	public HttpServer() throws SQLException, IOException{
 		ds = new HSQLDataSource("target/broker");
 		// initialize database
 		initialiseDatabase();
 		rc = new ResourceConfig();
 		// register broker services
-		register(AuthFilterSSLHeaders.class);
+		try( InputStream in = getClass().getResourceAsStream("/api-keys.properties") ){
+			rc.register(new PropertyFileAPIKeys(in));			
+		}
 		register(BrokerEndpoint.class);
 		register(AggregatorEndpoint.class);
 		// register i2b2 cells

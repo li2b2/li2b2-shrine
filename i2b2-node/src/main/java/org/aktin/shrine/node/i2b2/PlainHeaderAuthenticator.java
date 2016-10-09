@@ -14,7 +14,7 @@ public class PlainHeaderAuthenticator implements ClientAuthenticator{
 	private String clientId;
 	private String clientDn;
 	
-	public PlainHeaderAuthenticator(String clientId, String clientDn) {
+	private PlainHeaderAuthenticator(String clientId, String clientDn) {
 		this.clientDn = clientDn;
 		this.clientId = clientId;
 	}

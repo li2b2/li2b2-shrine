@@ -41,14 +41,14 @@ public class RandomCountNode {
 	public static void main(String[] args) throws Exception{
 		String broker_service = args[0];
 		
-		String client_id = args[1];
-		String client_dn = args[2];
+		String apiKey = args[1];
 
 		// TODO broker keystore
 		// setup broker client
 		RandomCountNode app = new RandomCountNode();
 
-		app.connectBroker(broker_service, new PlainHeaderAuthenticator(client_id, client_dn));
+//		app.connectBroker(broker_service, new PlainHeaderAuthenticator(client_id, client_dn));
+		app.connectBroker(broker_service, HttpApiKeyAuth.newBearer(apiKey));
 		app.processRequests();
 	}
 	public void connectBroker(String broker_endpoint, ClientAuthenticator auth) throws IOException{
