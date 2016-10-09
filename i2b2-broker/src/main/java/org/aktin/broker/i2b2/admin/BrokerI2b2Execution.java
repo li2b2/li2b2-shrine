@@ -55,7 +55,7 @@ public class BrokerI2b2Execution implements QueryExecution{
 
 	@Override
 	public String getLabel() {
-		return status.node;
+		return "Node "+status.node;
 	}
 
 	@Override
