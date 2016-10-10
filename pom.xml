@@ -13,6 +13,7 @@
 		<module>dktk-node</module>
 		<module>i2b2-broker</module>
 		<module>i2b2-shrine</module>
+		<module>i2b2-shrine-distribution</module>
 	</modules>
 	<scm>
 		<developerConnection>scm:git:git@github.com:aktin/ashrine.git</developerConnection>

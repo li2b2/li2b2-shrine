@@ -1,0 +1,24 @@
+<ontology>
+	<concept key="gender">
+		<name>Gender</name>
+		<narrower>
+			<concept key="gender/female"><name>Female</name></concept>
+			<concept key="gender/male"><name>Male</name></concept>
+			<concept key="gender/indeterminate"><name>Indeterminate</name></concept>
+		</narrower>
+	</concept>
+	<concept key="vitalstatus">
+		<name>Vital status</name>
+		<narrower>
+			<concept key="vitalstatus/living"><name>Living</name></concept>
+			<concept key="vitalstatus/deceased"><name>Deceased</name></concept>
+		</narrower>
+	</concept>
+	<concept key="specimen">
+		<name>Specimen</name>
+		<narrower>
+			<concept key="specimen/plasma"><name>Plasma</name></concept>
+			<concept key="specimen/serum"><name>Serum</name></concept>
+		</narrower>
+	</concept>
+</ontology>
