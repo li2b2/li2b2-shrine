@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 import org.aktin.broker.client.auth.HttpApiKeyAuth;
 import org.aktin.broker.node.AbstractNode;
@@ -20,14 +21,14 @@ import de.sekmi.li2b2.hive.ErrorResponseException;
 import de.sekmi.li2b2.hive.HiveException;
 import de.sekmi.li2b2.hive.crc.QueryResultType;
 
-public class Application extends AbstractNode{
+public class I2b2Node extends AbstractNode{
 	Li2b2Client i2b2;
 
 	private static final String MEDIA_TYPE_I2B2_QUERY_DEFINITION = "text/vnd.i2b2.query-definition+xml";
 	private static final String MEDIA_TYPE_I2B2_RESULT_OUTPUT_LIST = "text/vnd.i2b2.result-output-list+xml";
 //	private static final String MEDIA_TYPE_I2B2_RESULT_ENVELOPE = "text/vnd.i2b2.result-envelope+xml";
 	
-	public Application() throws ParserConfigurationException{
+	public I2b2Node() throws ParserConfigurationException{
 	}
 	public void connectI2b2(String pm_service, String user, String domain, String password) throws IOException, ErrorResponseException, HiveException{
 		Li2b2Client client = new Li2b2Client();
@@ -37,8 +38,12 @@ public class Application extends AbstractNode{
 		this.i2b2 = client;
 		
 	}
-	public void issueWarning(String warning){
+	private void issueWarning(String warning){
 		System.err.println("Warning: "+warning);
+	}
+	private void printError(String message, Throwable e){
+		e.printStackTrace();
+		System.err.println("Error: "+message);		
 	}
 	private void postOnlyPatientCount(RequestInfo request, MasterInstanceResult mir) throws IOException{
 		Integer count = null;
@@ -99,10 +104,17 @@ public class Application extends AbstractNode{
 			// run query definition
 			MasterInstanceResult mir;
 			try {
+				if( hasTransformer() ){
+					def = transform(def);
+				}
 				mir = i2b2.CRC().runQueryInstance(def.getDocumentElement(), resultList);
 			} catch (HiveException e) {
-				// TODO log error
-				// TODO report error message
+				// report error message
+				printError("Query execution failed for request #"+request.getId(), e);
+				broker.postRequestStatus(request.getId(), RequestStatus.failed);
+				continue;
+			} catch (TransformerException e) {
+				printError("Query transformation failed for request #"+request.getId(), e);
 				broker.postRequestStatus(request.getId(), RequestStatus.failed);
 				continue;
 			}
@@ -129,11 +141,11 @@ public class Application extends AbstractNode{
 	 */
 	public static void main(String[] args) throws Exception{
 		// TODO Auto-generated method stub
-		String i2b2_pm_service = args[0];
-		String i2b2_user = args[1];
-		String i2b2_pass = args[2];
-		String broker_service = args[3];
-		String broker_key = args[4];
+		String broker_service = args[0];
+		String broker_key = args[1];
+		String i2b2_pm_service = args[2];
+		String i2b2_user = args[3];
+		String i2b2_pass = args[4];
 
 		// setup i2b2 client
 		String i2b2_domain = null;
@@ -143,9 +155,11 @@ public class Application extends AbstractNode{
 			i2b2_domain = i2b2_user.substring(at+1);
 			i2b2_user = i2b2_user.substring(0, at);
 		}
-		// TODO broker keystore
 		// setup broker client
-		Application app = new Application();
+		I2b2Node app = new I2b2Node();
+		if( args.length == 6 ){
+			app.loadTransformer(args[5]);
+		}
 		app.connectI2b2(i2b2_pm_service, i2b2_user, i2b2_domain, i2b2_pass);
 		app.connectBroker(broker_service, HttpApiKeyAuth.newBearer(broker_key));
 		app.processRequests();
