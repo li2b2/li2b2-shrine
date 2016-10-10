@@ -13,6 +13,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.aktin.broker.client.BrokerClient;
 import org.aktin.broker.client.auth.ClientAuthenticator;
+import org.aktin.broker.client.auth.HttpApiKeyAuth;
 import org.aktin.broker.xml.RequestInfo;
 import org.aktin.broker.xml.RequestStatus;
 import org.aktin.broker.xml.SoftwareModule;

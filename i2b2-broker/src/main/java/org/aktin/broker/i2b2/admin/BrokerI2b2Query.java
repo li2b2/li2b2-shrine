@@ -94,7 +94,7 @@ public class BrokerI2b2Query implements Query {
 	public void setDisplayName(String name) throws IOException{
 		lazyLoadMetadata();
 		meta.displayName = name;
-		// TODO write to broker
+		// write to broker
 		broker.putRequestDefinition(info.getId(), QueryMetadata.MEDIA_TYPE, out -> JAXB.marshal(meta, out));
 	}
 

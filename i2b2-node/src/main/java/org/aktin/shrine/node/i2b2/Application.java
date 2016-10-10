@@ -1,20 +1,16 @@
 package org.aktin.shrine.node.i2b2;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.aktin.broker.client.BrokerClient;
+import org.aktin.broker.client.auth.HttpApiKeyAuth;
+import org.aktin.broker.node.AbstractNode;
 import org.aktin.broker.xml.RequestInfo;
 import org.aktin.broker.xml.RequestStatus;
-import org.aktin.broker.xml.SoftwareModule;
 import org.w3c.dom.Document;
 
 import de.sekmi.li2b2.client.Li2b2Client;
@@ -24,21 +20,14 @@ import de.sekmi.li2b2.hive.ErrorResponseException;
 import de.sekmi.li2b2.hive.HiveException;
 import de.sekmi.li2b2.hive.crc.QueryResultType;
 
-public class Application {
-	long startup;
+public class Application extends AbstractNode{
 	Li2b2Client i2b2;
-	BrokerClient broker;
-	DocumentBuilder builder;
 
 	private static final String MEDIA_TYPE_I2B2_QUERY_DEFINITION = "text/vnd.i2b2.query-definition+xml";
 	private static final String MEDIA_TYPE_I2B2_RESULT_OUTPUT_LIST = "text/vnd.i2b2.result-output-list+xml";
 //	private static final String MEDIA_TYPE_I2B2_RESULT_ENVELOPE = "text/vnd.i2b2.result-envelope+xml";
 	
 	public Application() throws ParserConfigurationException{
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		factory.setNamespaceAware(true);
-		builder = factory.newDocumentBuilder();
-		this.startup = System.currentTimeMillis();
 	}
 	public void connectI2b2(String pm_service, String user, String domain, String password) throws IOException, ErrorResponseException, HiveException{
 		Li2b2Client client = new Li2b2Client();
@@ -48,18 +37,8 @@ public class Application {
 		this.i2b2 = client;
 		
 	}
-	public void connectBroker(String broker_endpoint) throws IOException{
-		try {
-			this.broker = new BrokerClient(new URI(broker_endpoint));
-		} catch (URISyntaxException e) {
-			throw new IOException(e);
-		}
-		// optional status exchange
-		broker.getBrokerStatus();
-		broker.postMyStatus(startup, new SoftwareModule("org.aktin.broker.i2b2.node", "1.0-SNAPSHOT"));
-	}
 	public void issueWarning(String warning){
-		
+		System.err.println("Warning: "+warning);
 	}
 	private void postOnlyPatientCount(RequestInfo request, MasterInstanceResult mir) throws IOException{
 		Integer count = null;
@@ -154,6 +133,7 @@ public class Application {
 		String i2b2_user = args[1];
 		String i2b2_pass = args[2];
 		String broker_service = args[3];
+		String broker_key = args[4];
 
 		// setup i2b2 client
 		String i2b2_domain = null;
@@ -167,7 +147,7 @@ public class Application {
 		// setup broker client
 		Application app = new Application();
 		app.connectI2b2(i2b2_pm_service, i2b2_user, i2b2_domain, i2b2_pass);
-		app.connectBroker(broker_service);
+		app.connectBroker(broker_service, HttpApiKeyAuth.newBearer(broker_key));
 		app.processRequests();
 	}
 
