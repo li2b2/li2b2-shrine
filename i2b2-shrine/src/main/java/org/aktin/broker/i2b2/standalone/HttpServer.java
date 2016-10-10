@@ -33,6 +33,7 @@ import de.sekmi.li2b2.services.impl.ProjectManagerImpl;
 import liquibase.exception.LiquibaseException;
 
 public class HttpServer {
+	private Configuration config;
 	private ResourceConfig rc;
 	private Server jetty;
 	private DataSource ds;
@@ -40,13 +41,14 @@ public class HttpServer {
 	private ProjectManager pm;
 	private Ontology ont;
 	
-	public HttpServer() throws SQLException, IOException{
-		ds = new HSQLDataSource("target/broker");
+	public HttpServer(Configuration config) throws SQLException, IOException{
+		this.config = config;
+		ds = new HSQLDataSource(config.getDatabasePath());
 		// initialize database
 		initialiseDatabase();
 		rc = new ResourceConfig();
 		// register broker services
-		try( InputStream in = getClass().getResourceAsStream("/api-keys.properties") ){
+		try( InputStream in = config.readAPIKeyProperties() ){
 			rc.register(new PropertyFileAPIKeys(in));			
 		}
 		register(BrokerEndpoint.class);
@@ -69,7 +71,7 @@ public class HttpServer {
 			throw new SQLException("Unable to initialise database", e);
 		}
 	}
-	private void loadLi2b2Backend(){
+	private void loadLi2b2Backend() throws IOException{
 		pm = new ProjectManagerImpl();
 		User user = pm.addUser("demo", "i2b2demo");
 		user.setPassword("demouser".toCharArray());
@@ -77,7 +79,7 @@ public class HttpServer {
 		//pm.addProject("Demo2", "li2b2 Demo2").addUserRoles(user, "USER");		
 		
 		// ontology
-		ont = OntologyImpl.parse(getClass().getResource("/ontology.xml"));
+		ont = OntologyImpl.parse(config.readOntologyXML());
 	}
 	public final void register(Class<?> componentClass){
 		rc.register(componentClass);
@@ -116,6 +118,7 @@ public class HttpServer {
 		jetty.stop();
 	}
 
+	
 	/**
 	 * Run the test server with with the official i2b2
 	 * webclient.
@@ -141,7 +144,7 @@ public class HttpServer {
 		Class.forName("org.hsqldb.jdbcDriver");
 		
 		// start server
-		HttpServer server = new HttpServer();
+		HttpServer server = new HttpServer(new DefaultConfiguration());
 		try{
 			server.start(new InetSocketAddress(port));
 			System.err.println("Broker service at: "+server.getBrokerServiceURI());
