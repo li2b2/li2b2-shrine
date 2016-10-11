@@ -54,7 +54,7 @@ public class CentraxxNode extends AbstractNode{
 		String apiKey = args[1];
 		String centraxx_endpoint = args[2];
 
-		CentraxxNode app = new CentraxxNode(URI.create(centraxx_endpoint),"target/pending.properties");
+		CentraxxNode app = new CentraxxNode(URI.create(centraxx_endpoint),"pending.properties");
 		// setup broker client
 		if( args.length == 4 ){
 			System.out.println("Using transformation: "+args[3]);
@@ -76,12 +76,13 @@ public class CentraxxNode extends AbstractNode{
 	 * @throws IOException error
 	 */
 	private String createCentraxxQuery(Document query) throws IOException{
-		URL url = centraxx_teiler.resolve("requests").toURL();
+		URL url = centraxx_teiler.resolve("requests?statisticsOnly=true").toURL();
 		HttpURLConnection c = (HttpURLConnection)url.openConnection();
 		// prepare connection
 		c.setRequestMethod("POST");
 		c.setRequestProperty("Content-Type", "application/xml;charset=UTF-8");
 		c.setRequestProperty("Accept", "application/xml");
+		c.setRequestProperty("Delay", "60");
 		c.setDoInput(true);
 		c.setDoOutput(true);
 		c.connect();
@@ -160,6 +161,10 @@ public class CentraxxNode extends AbstractNode{
 		List<RequestInfo> requests = broker.listMyRequests();
 		// process requests synchronously. first come first serve
 		for( RequestInfo request : requests ){
+			if( pendingCentraxxQueries.containsKey(request.getId()) ){
+				System.out.println("Request #"+request.getId()+" already pending");
+				continue;
+			}
 			// check media type
 			if( !request.hasMediaType(MEDIA_TYPE_I2B2_QUERY_DEFINITION) ){
 				// need query definition
