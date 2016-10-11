@@ -2,6 +2,7 @@ package org.aktin.shrine.node.i2b2;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,29 +13,46 @@ import org.aktin.broker.client.auth.HttpApiKeyAuth;
 import org.aktin.broker.node.AbstractNode;
 import org.aktin.broker.xml.RequestInfo;
 import org.aktin.broker.xml.RequestStatus;
+import org.aktin.broker.xml.util.Util;
 import org.w3c.dom.Document;
 
 import de.sekmi.li2b2.client.Li2b2Client;
 import de.sekmi.li2b2.client.crc.MasterInstanceResult;
 import de.sekmi.li2b2.client.crc.QueryResultInstance;
+import de.sekmi.li2b2.client.pm.UserConfiguration;
 import de.sekmi.li2b2.hive.ErrorResponseException;
 import de.sekmi.li2b2.hive.HiveException;
 import de.sekmi.li2b2.hive.crc.QueryResultType;
+import de.sekmi.li2b2.hive.pm.UserProject;
 
 public class I2b2Node extends AbstractNode{
 	Li2b2Client i2b2;
 
 	private static final String MEDIA_TYPE_I2B2_QUERY_DEFINITION = "text/vnd.i2b2.query-definition+xml";
-	private static final String MEDIA_TYPE_I2B2_RESULT_OUTPUT_LIST = "text/vnd.i2b2.result-output-list+xml";
+	private static final String MEDIA_TYPE_I2B2_RESULT_OUTPUT_LIST = "text/vnd.i2b2.result-output-list";
 //	private static final String MEDIA_TYPE_I2B2_RESULT_ENVELOPE = "text/vnd.i2b2.result-envelope+xml";
 	
 	public I2b2Node() throws ParserConfigurationException{
 	}
-	public void connectI2b2(String pm_service, String user, String domain, String password) throws IOException, ErrorResponseException, HiveException{
+	public void connectI2b2(String proxy, String pm_service, String user, String domain, String password) throws IOException, ErrorResponseException, HiveException{
 		Li2b2Client client = new Li2b2Client();
+		if( proxy != null ){
+			System.out.println("Using proxy "+proxy);
+			client.setProxy(new URL(proxy));
+		}
 		client.setAuthorisation(user, password, domain);
 		client.setPM(new URL(pm_service));
-		client.PM().requestUserConfiguration();
+		UserConfiguration uc = client.PM().requestUserConfiguration();
+		// set project
+		UserProject[] projects = uc.getProjects();
+		if( projects != null ){
+			// use first project
+			client.setProjectId(projects[0].id);
+			System.out.println("Project:"+projects[0].id);
+			System.out.println("Roles:"+Arrays.toString(projects[0].role));
+		}
+		// set services
+		client.setServices(uc.getCells());
 		this.i2b2 = client;
 		
 	}
@@ -54,9 +72,10 @@ public class I2b2Node extends AbstractNode{
 				count = qr.set_size;
 				break;
 			}
-			// submit results to aggregator
-			broker.putRequestResult(request.getId(), "text/vnd.aktin.patient-count", Objects.toString(count));
 		}		
+		// submit results to aggregator
+		System.out.println("Patient count for request #"+request.getId()+" is "+count);
+		broker.putRequestResult(request.getId(), "text/vnd.aktin.patient-count", Objects.toString(count));
 	}
 	// TODO for second version, concatenate the results (each starting with <?xml)
 	// TODO for third version, add multiple result documents
@@ -105,8 +124,11 @@ public class I2b2Node extends AbstractNode{
 			MasterInstanceResult mir;
 			try {
 				if( hasTransformer() ){
+					System.out.println("Applying transformation..");
 					def = transform(def);
 				}
+				System.out.println("Running query #"+request.getId());
+				Util.printDOM(def, System.out, "UTF-8");
 				mir = i2b2.CRC().runQueryInstance(def.getDocumentElement(), resultList);
 			} catch (HiveException e) {
 				// report error message
@@ -155,12 +177,22 @@ public class I2b2Node extends AbstractNode{
 			i2b2_domain = i2b2_user.substring(at+1);
 			i2b2_user = i2b2_user.substring(0, at);
 		}
+
+		// extract proxy if specified
+		String i2b2_proxy = null;
+		at = i2b2_pm_service.indexOf('|');
+		if( at != -1 ){
+			// proxy specified following the | character
+			i2b2_proxy = i2b2_pm_service.substring(at+1);
+			i2b2_pm_service = i2b2_pm_service.substring(0, at);
+		}
 		// setup broker client
 		I2b2Node app = new I2b2Node();
 		if( args.length == 6 ){
 			app.loadTransformer(args[5]);
 		}
-		app.connectI2b2(i2b2_pm_service, i2b2_user, i2b2_domain, i2b2_pass);
+		
+		app.connectI2b2(i2b2_proxy, i2b2_pm_service, i2b2_user, i2b2_domain, i2b2_pass);
 		app.connectBroker(broker_service, HttpApiKeyAuth.newBearer(broker_key));
 		app.processRequests();
 	}
