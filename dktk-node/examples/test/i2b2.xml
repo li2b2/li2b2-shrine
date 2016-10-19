@@ -9,8 +9,8 @@
 			<constrain_by_value>
 				<value_operator>EQ</value_operator>
 				<value_constraint>1</value_constraint>
-				<value_type>NUMERIC</value_type>
-				<value_unit_of_measure>g/ml</value_unit_of_measure>
+				<value_type>NUMBER</value_type>
+				<value_unit_of_measure>meq/l</value_unit_of_measure>
 			</constrain_by_value>
 		</item>
 		<item>
@@ -18,8 +18,8 @@
 			<constrain_by_value>
 				<value_operator>NE</value_operator>
 				<value_constraint>1</value_constraint>
-				<value_type>NUMERIC</value_type>
-				<value_unit_of_measure>g/ml</value_unit_of_measure>
+				<value_type>NUMBER</value_type>
+				<value_unit_of_measure>meq/l</value_unit_of_measure>
 			</constrain_by_value>
 		</item>
 		<item>
@@ -27,8 +27,8 @@
 			<constrain_by_value>
 				<value_operator>GT</value_operator>
 				<value_constraint>1</value_constraint>
-				<value_type>NUMERIC</value_type>
-				<value_unit_of_measure>g/ml</value_unit_of_measure>
+				<value_type>NUMBER</value_type>
+				<value_unit_of_measure>meq/l</value_unit_of_measure>
 			</constrain_by_value>
 		</item>
 		<item>
@@ -36,8 +36,8 @@
 			<constrain_by_value>
 				<value_operator>GE</value_operator>
 				<value_constraint>1</value_constraint>
-				<value_type>NUMERIC</value_type>
-				<value_unit_of_measure>g/ml</value_unit_of_measure>
+				<value_type>NUMBER</value_type>
+				<value_unit_of_measure>meq/l</value_unit_of_measure>
 			</constrain_by_value>
 		</item>
 		<item>
@@ -45,8 +45,8 @@
 			<constrain_by_value>
 				<value_operator>LT</value_operator>
 				<value_constraint>1</value_constraint>
-				<value_type>NUMERIC</value_type>
-				<value_unit_of_measure>g/ml</value_unit_of_measure>
+				<value_type>NUMBER</value_type>
+				<value_unit_of_measure>meq/l</value_unit_of_measure>
 			</constrain_by_value>
 		</item>
 		<item>
@@ -54,8 +54,8 @@
 			<constrain_by_value>
 				<value_operator>LE</value_operator>
 				<value_constraint>1</value_constraint>
-				<value_type>NUMERIC</value_type>
-				<value_unit_of_measure>g/ml</value_unit_of_measure>
+				<value_type>NUMBER</value_type>
+				<value_unit_of_measure>meq/l</value_unit_of_measure>
 			</constrain_by_value>
 		</item>
 		<item>
@@ -63,8 +63,8 @@
 			<constrain_by_value>
 				<value_operator>BETWEEN</value_operator>
 				<value_constraint>1 and 2</value_constraint>
-				<value_type>NUMERIC</value_type>
-				<value_unit_of_measure>g/ml</value_unit_of_measure>
+				<value_type>NUMBER</value_type>
+				<value_unit_of_measure>meq/l</value_unit_of_measure>
 			</constrain_by_value>
 		</item>
 		<item>
@@ -72,8 +72,8 @@
 			<constrain_by_value>
 				<value_operator>LIKE[begin]</value_operator>
 				<value_constraint>begin</value_constraint>
-				<value_type>NUMERIC</value_type>
-				<value_unit_of_measure>g/ml</value_unit_of_measure>
+				<value_type>NUMBER</value_type>
+				<value_unit_of_measure>meq/l</value_unit_of_measure>
 			</constrain_by_value>
 		</item>
 		<item>
@@ -81,8 +81,8 @@
 			<constrain_by_value>
 				<value_operator>LIKE[end]</value_operator>
 				<value_constraint>end</value_constraint>
-				<value_type>NUMERIC</value_type>
-				<value_unit_of_measure>g/ml</value_unit_of_measure>
+				<value_type>NUMBER</value_type>
+				<value_unit_of_measure>meq/l</value_unit_of_measure>
 			</constrain_by_value>
 		</item>
 		<item>
@@ -90,8 +90,8 @@
 			<constrain_by_value>
 				<value_operator>LIKE[exact]</value_operator>
 				<value_constraint>exact</value_constraint>
-				<value_type>NUMERIC</value_type>
-				<value_unit_of_measure>g/ml</value_unit_of_measure>
+				<value_type>NUMBER</value_type>
+				<value_unit_of_measure>meq/l</value_unit_of_measure>
 			</constrain_by_value>
 		</item>
 		<item>
@@ -99,8 +99,8 @@
 			<constrain_by_value>
 				<value_operator>LIKE[contains]</value_operator>
 				<value_constraint>like contains</value_constraint>
-				<value_type>NUMERIC</value_type>
-				<value_unit_of_measure>g/ml</value_unit_of_measure>
+				<value_type>NUMBER</value_type>
+				<value_unit_of_measure>meq/l</value_unit_of_measure>
 			</constrain_by_value>
 		</item>
 		<item>
@@ -108,8 +108,8 @@
 			<constrain_by_value>
 				<value_operator>CONTAINS</value_operator>
 				<value_constraint>contains</value_constraint>
-				<value_type>NUMERIC</value_type>
-				<value_unit_of_measure>g/ml</value_unit_of_measure>
+				<value_type>NUMBER</value_type>
+				<value_unit_of_measure>meq/l</value_unit_of_measure>
 			</constrain_by_value>
 		</item>
 		<item>
@@ -117,8 +117,8 @@
 			<constrain_by_value>
 				<value_operator>CONTAINS[database]</value_operator>
 				<value_constraint>contains-database</value_constraint>
-				<value_type>NUMERIC</value_type>
-				<value_unit_of_measure>g/ml</value_unit_of_measure>
+				<value_type>NUMBER</value_type>
+				<value_unit_of_measure>meq/l</value_unit_of_measure>
 			</constrain_by_value>
 		</item>
 	</panel>

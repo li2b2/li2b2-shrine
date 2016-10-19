@@ -20,7 +20,7 @@
         </i2b2>
         <dktk>
 			<key>dktk constrain or isnotnull</key>
-			<use_i2b2_constraint type="NUMERIC" unit="g/ml"/>
+			<use_i2b2_constraint type="NUMBER" unit="meq/l"/>
         </dktk>
 	</entry>
 	<entry>

@@ -27,97 +27,119 @@
 
 <!-- im Falle von ns7:Between wird immer von <use_i2b2_constraint/> ausgegangen -->
 <xsl:template match="*">
-	<xsl:variable name="dktk_key">
-		<xsl:choose>
-			<xsl:when test="name() = 'ns7:Between'">
-				<xsl:value-of select="ns6:RangeAttribute/ns2:MdrKey"/>
-			</xsl:when>
-			<xsl:when test="(name() = 'ns7:IsNotNull') or (name() = 'ns7:IsNull')">
-				<xsl:value-of select="ns2:MdrKey"/>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of select="ns4:Attribute/ns2:MdrKey"/>		
-			</xsl:otherwise>		
-		</xsl:choose>
-	</xsl:variable>
-	<xsl:variable name="dktk_operator" select="name()"/>
-	<xsl:variable name="dktk_value" select="ns4:Attribute/ns3:Value"/>
-	<xsl:variable name="dktk_valuelower" select="ns6:RangeAttribute/ns3:LowerBound"/>
-	<xsl:variable name="dktk_valueupper" select="ns6:RangeAttribute/ns3:UpperBound"/>
-	<xsl:variable name="i2b2_operator">
-		<xsl:choose>
-			<xsl:when test="$dktk_operator = 'ns7:Eq'">EQ</xsl:when>
-			<xsl:when test="$dktk_operator = 'ns7:Neq'">NE</xsl:when>
-			<xsl:when test="$dktk_operator = 'ns7:Gt'">GT</xsl:when>
-			<xsl:when test="$dktk_operator = 'ns7:Geq'">GE</xsl:when>
-			<xsl:when test="$dktk_operator = 'ns7:Lt'">LT</xsl:when>
-			<xsl:when test="$dktk_operator = 'ns7:Leq'">LE</xsl:when>
-			<xsl:when test="$dktk_operator = 'ns7:Like'">
-				<xsl:if test="starts-with($dktk_value,'%') 
-					and substring($dktk_value,string-length($dktk_value)) = '%'">LIKE[contains]</xsl:if>
-				<xsl:if test="starts-with($dktk_value,'%')
-					and not(substring($dktk_value,string-length($dktk_value)) = '%')">LIKE[begin]</xsl:if>
-				<xsl:if test="not(starts-with($dktk_value,'%'))
-					and substring($dktk_value,string-length($dktk_value)) = '%'">LIKE[end]</xsl:if>
-				<xsl:if test="not(starts-with($dktk_value,'%'))
-					and not(substring($dktk_value,string-length($dktk_value)) = '%')">LIKE[exact]</xsl:if>
-			</xsl:when>
-			<xsl:when test="$dktk_operator = 'ns7:Between'">BETWEEN</xsl:when>
-			<xsl:when test="$dktk_operator = 'ns7:IsNull'"/>
-			<xsl:when test="$dktk_operator = 'ns7:IsNotNull'"/>
-			<xsl:otherwise>
-				<xsl:message terminate="yes">
-					Zusammengesetzter Schluessel aus
-					Key: <xsl:value-of select="$dktk_key"/> 
-					Operator: <xsl:value-of select="$dktk_operator"/>
-					Value: <xsl:value-of select="$dktk_value"/>
-					
-					Nicht unterstuetzter Operator.
-				</xsl:message>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:variable>
-	<xsl:variable name="i2b2_value">
-		<xsl:choose>
-			<xsl:when test="$dktk_operator = 'ns7:Between'">
-				<xsl:value-of select="$dktk_valuelower"/> and <xsl:value-of select="$dktk_valueupper"/>
-			</xsl:when>
-			<xsl:when test="$dktk_operator = 'ns7:Like'">
-				<xsl:if test="starts-with($dktk_value,'%') 
-					and substring($dktk_value,string-length($dktk_value)) = '%'">
-					<xsl:value-of select="substring($dktk_value,2,string-length($dktk_value) - 2)"/>
-				</xsl:if>
-				<xsl:if test="starts-with($dktk_value,'%')
-					and not(substring($dktk_value,string-length($dktk_value)) = '%')">
-					<xsl:value-of select="substring($dktk_value,2)"/>
-				</xsl:if>
-				<xsl:if test="not(starts-with($dktk_value,'%'))
-					and substring($dktk_value,string-length($dktk_value)) = '%'">
-					<xsl:value-of select="substring($dktk_value,1,string-length($dktk_value) - 1)"/>
-				</xsl:if>
-				<xsl:if test="not(starts-with($dktk_value,'%'))
-					and not(substring($dktk_value,string-length($dktk_value)) = '%')">
+	<item>
+		
+		<xsl:variable name="dktk_key">
+			<xsl:choose>
+				<xsl:when test="name() = 'ns7:Between'">
+					<xsl:value-of select="ns6:RangeAttribute/ns2:MdrKey"/>
+				</xsl:when>
+				<xsl:when test="(name() = 'ns7:IsNotNull') or (name() = 'ns7:IsNull')">
+					<xsl:value-of select="ns2:MdrKey"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="ns4:Attribute/ns2:MdrKey"/>		
+				</xsl:otherwise>		
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="dktk_operator" select="name()"/>
+		<xsl:variable name="dktk_value" select="ns4:Attribute/ns3:Value"/>
+		<xsl:variable name="dktk_valuelower" select="ns6:RangeAttribute/ns3:LowerBound"/>
+		<xsl:variable name="dktk_valueupper" select="ns6:RangeAttribute/ns3:UpperBound"/>
+		<xsl:variable name="i2b2_operator">
+			<xsl:choose>
+				<xsl:when test="$dktk_operator = 'ns7:Eq'">EQ</xsl:when>
+				<xsl:when test="$dktk_operator = 'ns7:Neq'">NE</xsl:when>
+				<xsl:when test="$dktk_operator = 'ns7:Gt'">GT</xsl:when>
+				<xsl:when test="$dktk_operator = 'ns7:Geq'">GE</xsl:when>
+				<xsl:when test="$dktk_operator = 'ns7:Lt'">LT</xsl:when>
+				<xsl:when test="$dktk_operator = 'ns7:Leq'">LE</xsl:when>
+				<xsl:when test="$dktk_operator = 'ns7:Like'">
+					<xsl:if test="starts-with($dktk_value,'%') 
+						and substring($dktk_value,string-length($dktk_value)) = '%'">LIKE[contains]</xsl:if>
+					<xsl:if test="starts-with($dktk_value,'%')
+						and not(substring($dktk_value,string-length($dktk_value)) = '%')">LIKE[begin]</xsl:if>
+					<xsl:if test="not(starts-with($dktk_value,'%'))
+						and substring($dktk_value,string-length($dktk_value)) = '%'">LIKE[end]</xsl:if>
+					<xsl:if test="not(starts-with($dktk_value,'%'))
+						and not(substring($dktk_value,string-length($dktk_value)) = '%')">LIKE[exact]</xsl:if>
+				</xsl:when>
+				<xsl:when test="$dktk_operator = 'ns7:Between'">BETWEEN</xsl:when>
+				<xsl:when test="$dktk_operator = 'ns7:IsNull'"/>
+				<xsl:when test="$dktk_operator = 'ns7:IsNotNull'"/>
+				<xsl:otherwise>
+					<xsl:message terminate="yes">
+						Zusammengesetzter Schluessel aus
+						Key: <xsl:value-of select="$dktk_key"/> 
+						Operator: <xsl:value-of select="$dktk_operator"/>
+						Value: <xsl:value-of select="$dktk_value"/>
+						
+						Nicht unterstuetzter Operator.
+					</xsl:message>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="i2b2_value">
+			<xsl:choose>
+				<xsl:when test="$dktk_operator = 'ns7:Between'">
+					<xsl:value-of select="$dktk_valuelower"/> and <xsl:value-of select="$dktk_valueupper"/>
+				</xsl:when>
+				<xsl:when test="$dktk_operator = 'ns7:Like'">
+					<xsl:if test="starts-with($dktk_value,'%') 
+						and substring($dktk_value,string-length($dktk_value)) = '%'">
+						<xsl:value-of select="substring($dktk_value,2,string-length($dktk_value) - 2)"/>
+					</xsl:if>
+					<xsl:if test="starts-with($dktk_value,'%')
+						and not(substring($dktk_value,string-length($dktk_value)) = '%')">
+						<xsl:value-of select="substring($dktk_value,2)"/>
+					</xsl:if>
+					<xsl:if test="not(starts-with($dktk_value,'%'))
+						and substring($dktk_value,string-length($dktk_value)) = '%'">
+						<xsl:value-of select="substring($dktk_value,1,string-length($dktk_value) - 1)"/>
+					</xsl:if>
+					<xsl:if test="not(starts-with($dktk_value,'%'))
+						and not(substring($dktk_value,string-length($dktk_value)) = '%')">
+						<xsl:value-of select="$dktk_value"/>
+					</xsl:if>
+				</xsl:when>
+				<xsl:otherwise>
 					<xsl:value-of select="$dktk_value"/>
-				</xsl:if>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of select="$dktk_value"/>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:variable>
-	
-	<!-- map entries with proper dktk key and <use_i2b2_constraint/> -->
-	<xsl:variable name="me_i2b2c" select="$map//entry[dktk/key = $dktk_key and dktk/use_i2b2_constraint]"/>
-	<!-- map entries with proper dktk key+operator+value 
-		for IsNull and IsNotNull there is no value -->
-	<xsl:variable name="me_kov" select="$map//entry[dktk/key = $dktk_key and dktk/operator = $dktk_operator
-										and ((dktk/value = $dktk_value) or not($dktk_value))]"/>
-	
-	<xsl:choose>
-		<xsl:when test="(count($me_i2b2c) = 1)
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		
+		<!-- map entries with proper dktk key and <use_i2b2_constraint/> -->
+		<xsl:variable name="me_i2b2c" select="$map//entry[dktk/key = $dktk_key and dktk/use_i2b2_constraint]"/>
+		<!-- map entries with proper dktk key+operator+value 
+			for IsNull and IsNotNull there is no value -->
+		<xsl:variable name="me_kov" select="$map//entry[dktk/key = $dktk_key and dktk/operator = $dktk_operator
+											and ((dktk/value = $dktk_value) or not($dktk_value))]"/>
+		
+		<xsl:variable name="i2b2_key"><xsl:choose>
+				<xsl:when test="(count($me_i2b2c) = 1)
+						and count($me_kov) = 0">
+					<xsl:value-of select="$me_i2b2c/i2b2/key"/>					
+				</xsl:when>				
+				<xsl:when test="count($me_kov) = 1">
+					<xsl:value-of select="$me_kov/i2b2/key"/>
+				</xsl:when>				
+				<xsl:otherwise>
+					<xsl:message terminate="yes">
+						Zusammengesetzter Schluessel aus
+						Key: <xsl:value-of select="$dktk_key"/> 
+						Operator: <xsl:value-of select="$dktk_operator"/>
+						Value: <xsl:value-of select="$dktk_value"/>
+						
+						Es wurde kein (eindeutiger) entsprechender Eintrag in der Mapping-Tabelle gefunden.
+					</xsl:message>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>		
+		
+		<xsl:choose>
+			<xsl:when test="(count($me_i2b2c) = 1)
 					and count($me_kov) = 0">
-			<item>
-				<item_key><xsl:value-of select="$dktk_key"/></item_key>
+				<item_key><xsl:value-of select="$i2b2_key"/></item_key>
 				<!-- Fallunterscheiden IsNotNull, dann sind operator und value nicht gesetzt -->
 				<xsl:variable name="i2b2_type" select="$me_i2b2c/dktk/use_i2b2_constraint/@type"/>
 				<xsl:variable name="i2b2_unit" select="$me_i2b2c/dktk/use_i2b2_constraint/@unit"/>
@@ -139,32 +161,35 @@
 						<value_constraint><xsl:value-of select="$i2b2_value"/></value_constraint>
 					</constrain_by_value>
 				</xsl:if>
-			</item>
-		</xsl:when>
-		
-		<xsl:when test="count($me_kov) = 1">
-			<item>
-				<item_key><xsl:value-of select="$me_kov/i2b2/key"/></item_key>
-			</item>	
-		</xsl:when>
-		
-		<xsl:otherwise>
-			<xsl:message terminate="yes">
-				Zusammengesetzter Schluessel aus
-				Key: <xsl:value-of select="$dktk_key"/> 
-				Operator: <xsl:value-of select="$dktk_operator"/>
-				Value: <xsl:value-of select="$dktk_value"/>
-				
-				Es wurde kein (eindeutiger) entsprechender Eintrag in der Mapping-Tabelle gefunden.
-			</xsl:message>
-		</xsl:otherwise>
-	</xsl:choose>
+			</xsl:when>
+			
+			<xsl:when test="count($me_kov) = 1">
+				<item_key><xsl:value-of select="$i2b2_key"/></item_key>
+			</xsl:when>
+		</xsl:choose>	
+
+
+		<hlevel>3</hlevel>		
+		<item_name><xsl:value-of select="$i2b2_key"/></item_name>		
+		<tooltip>i2b2 key: <xsl:value-of select="$i2b2_key"/> dktk key: <xsl:value-of select="$dktk_key"/></tooltip>
+		<!-- ? --><class>ENC</class>
+		<item_icon>LA</item_icon>
+		<!-- ? --><item_is_synonym>false</item_is_synonym>
+	</item>
 </xsl:template>
 
 <xsl:template match="/">
 	<query_definition>
+		<query_name>translated dktk query</query_name>
+		<query_timing>ANY</query_timing>
+		<specificity_scale>0</specificity_scale>
 		<xsl:for-each select="ns7:View/ns7:Query/ns7:Where/ns7:And/ns7:Or">
 			<panel>
+				<panel_number><xsl:value-of select="position()"/></panel_number>			
+				<!-- ? --><panel_accuracy_scale>100</panel_accuracy_scale>
+				<!-- ? --><invert>0</invert>
+				<!-- ? --><panel_timing>ANY</panel_timing>
+				<!-- ? --><total_item_occurrences>1</total_item_occurrences>
 				<xsl:apply-templates/>
 			</panel>
 		</xsl:for-each>	
