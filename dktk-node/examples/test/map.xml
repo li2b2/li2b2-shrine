@@ -1,0 +1,129 @@
+<map xmlns:ns7="http://schema.samply.de/ccp/Query" 
+	xmlns:ns10="http://schema.samply.de/ccp/Case" 
+	xmlns:ns11="http://schema.samply.de/ccp/Sample" 
+	xmlns:ns12="http://schema.samply.de/ccp/QueryResultStatistic" 
+	xmlns:ns13="http://schema.samply.de/ccp/Inquiry" 
+	xmlns:ns14="http://schema.samply.de/ccp/Error" 
+	xmlns:ns15="http://schema.samply.de/ccp/QueryResult" 
+	xmlns:ns16="http://schema.samply.de/ccp/RorMetareg" 
+	xmlns:ns17="http://schema.samply.de/ccp/Patient" 
+	xmlns:ns2="http://schema.samply.de/ccp/MdrKey" 
+	xmlns:ns3="http://schema.samply.de/ccp/Value" 
+	xmlns:ns4="http://schema.samply.de/ccp/Attribute" 
+	xmlns:ns5="http://schema.samply.de/ccp/MultivalueAttribute" 
+	xmlns:ns6="http://schema.samply.de/ccp/RangeAttribute" 
+	xmlns:ns8="http://schema.samply.de/ccp/Container" 
+	xmlns:ns9="http://schema.samply.de/ccp/Entity">
+	<entry>
+        <i2b2>
+			<key>i2b2 constrain or isnotnull</key>
+        </i2b2>
+        <dktk>
+			<key>dktk constrain or isnotnull</key>
+			<use_i2b2_constraint type="NUMBER" unit="meq/l"/>
+        </dktk>
+	</entry>
+	<entry>
+        <i2b2>
+			<key>i2b2 equals</key>
+        </i2b2>
+        <dktk>
+			<key>dktk equals</key>
+			<operator>ns7:Eq</operator>
+			<value>1</value>
+        </dktk>
+	</entry>
+	<entry>
+        <i2b2>
+			<key>i2b2 not equals</key>
+        </i2b2>
+        <dktk>
+			<key>dktk not equals</key>
+			<operator>ns7:Neq</operator>
+			<value>1</value>
+        </dktk>
+	</entry>
+	<entry>
+        <i2b2>
+			<key>i2b2 greater</key>
+        </i2b2>
+        <dktk>
+			<key>dktk greater</key>
+			<operator>ns7:Gt</operator>
+			<value>1</value>
+        </dktk>
+	</entry>
+	<entry>
+        <i2b2>
+			<key>i2b2 greater equals</key>
+        </i2b2>
+        <dktk>
+			<key>dktk greater equals</key>
+			<operator>ns7:Geq</operator>
+			<value>1</value>
+        </dktk>
+	</entry>
+	<entry>
+        <i2b2>
+			<key>i2b2 lower</key>
+        </i2b2>
+        <dktk>
+			<key>dktk lower</key>
+			<operator>ns7:Lt</operator>
+			<value>1</value>
+        </dktk>
+	</entry>
+	<entry>
+        <i2b2>
+			<key>i2b2 lower equals</key>
+        </i2b2>
+        <dktk>
+			<key>dktk lower equals</key>
+			<operator>ns7:Leq</operator>
+			<value>1</value>
+        </dktk>
+	</entry>
+	<entry>
+        <i2b2>
+			<key>i2b2 is null</key>
+        </i2b2>
+        <dktk>
+			<key>dktk is null</key>
+			<operator>ns7:IsNull</operator>
+        </dktk>
+	</entry>
+	<entry>
+        <i2b2>
+			<key>i2b2 is not null</key>
+        </i2b2>
+        <dktk>
+			<key>dktk is not null</key>
+			<operator>ns7:IsNotNull</operator>
+        </dktk>
+	</entry>
+	<entry>
+        <i2b2>
+			<key>i2b2 dktkentry</key>
+        </i2b2>
+        <dktk>
+			<use_dktk_query>
+				<ns7:Eq>
+					<ns4:Attribute>
+						<ns2:MdrKey>dktk dktkentry</ns2:MdrKey>
+						<ns3:Value>1</ns3:Value>
+					</ns4:Attribute>
+				</ns7:Eq>
+			</use_dktk_query>
+        </dktk>
+	</entry>
+	<entry>
+        <i2b2>
+			<key>i2b2 dktkentry backward</key>
+        </i2b2>
+        <dktk>
+			<key>dktk dktkentry</key>
+			<operator>ns7:Eq</operator>
+			<value>1</value>
+        </dktk>
+	</entry>
+</map>
