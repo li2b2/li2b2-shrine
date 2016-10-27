@@ -18,10 +18,10 @@
 
 <table>
  <tr>
-  <td>
+  <td width="800" style="width:800px">
   <p>mapping type</p>
   </td>
-  <td>
+  <td rowspan="4">
   <p>i2b2 source</p>
   </td>
   <td>
