@@ -18,10 +18,10 @@
 
 <table>
  <tr>
-  <td width="800" style="width:800px">
+  <td>
   <p>mapping type</p>
   </td>
-  <td rowspan="4">
+  <td>
   <p>i2b2 source</p>
   </td>
   <td>
@@ -36,7 +36,7 @@
   <p>Simple Key Mapping<br/><br/>Bsp.: Alter0-9 <span><span>--></span></span>
   Alter0-9</p>
   </td>
-  <td>
+  <td rowspan="4">
   <p>&lt;item&gt;<br/><span>    </span><span>&lt;itemproperties/&gt;</span><br/><span>    </span>&lt;item_key&gt;<span>SOURCEKEY</span>&lt;/item_key&gt;<span></span><br/>&lt;/item&gt;</p>
   </td>
   <td>
