@@ -1,4 +1,4 @@
-<table class=MsoTableGrid border=0 cellspacing=0 cellpadding=0
+<table class=MsoTableGrid border=0 cellspacing=0 cellpadding=0 width=1000
  style='border-collapse:collapse;border:none;mso-yfti-tbllook:1184;mso-padding-alt:
  0cm 5.4pt 0cm 5.4pt;mso-border-insideh:none;mso-border-insidev:none'>
  <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes'>
