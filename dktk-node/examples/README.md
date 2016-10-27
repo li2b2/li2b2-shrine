@@ -19,16 +19,16 @@
 <table>
  <tr>
   <td>
-  <p>mapping typeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
+  <p>______________________________________________ mapping type</p>
   </td>
   <td>
-  <p>i2b2 source</p>
+  <p>______________________________________________ i2b2 source</p>
   </td>
   <td>
-  <p>mapentry</p>
+  <p>______________________________________________ mapentry</p>
   </td>
   <td>
-  <p>i2b2 result</p>
+  <p>______________________________________________ i2b2 result</p>
   </td>
  </tr>
  <tr>
