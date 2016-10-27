@@ -1,11 +1,10 @@
 <table>
  <tr>
   <td>
-  <br>
   Translate
   </td>
   <td>
-  ______________________________________________<br/>&lt;query_definition&gt;<br/><span>                </span>&lt;query_name/&gt;<br/><span>                </span>&lt;query_timing/&gt;<br/><span>                </span>&lt;specificity_scale/&gt;<br/><span>                </span>&lt;panel&gt;<br/><span>                               </span>&lt;panel_number/&gt;<br/><span>                               </span>&lt;panel_accuracy_scale/&gt;<br/><span>                               </span>&lt;invert/&gt;<br/><span>                               </span>&lt;panel_timing/&gt;<br/><span>                </span><span>                </span>&lt;total_item_occurrences/&gt;<br/><span>                               </span>&lt;item/&gt;<br/><span>                               </span>&lt;item/&gt;<br/><span>                               </span>…<br/><span>                               </span>&lt;item/&gt;<br/><span>                </span>&lt;/panel&gt;<br/><span>                </span>&lt;panel/&gt;<br/><span>                </span>...<br/><span>                </span>&lt;panel/&gt;<br/>&lt;/query_definition&gt;<br/>
+  ___________________________________________________________________________<br/>&lt;query_definition&gt;<br/><span>                </span>&lt;query_name/&gt;<br/><span>                </span>&lt;query_timing/&gt;<br/><span>                </span>&lt;specificity_scale/&gt;<br/><span>                </span>&lt;panel&gt;<br/><span>                               </span>&lt;panel_number/&gt;<br/><span>                               </span>&lt;panel_accuracy_scale/&gt;<br/><span>                               </span>&lt;invert/&gt;<br/><span>                               </span>&lt;panel_timing/&gt;<br/><span>                </span><span>                </span>&lt;total_item_occurrences/&gt;<br/><span>                               </span>&lt;item/&gt;<br/><span>                               </span>&lt;item/&gt;<br/><span>                               </span>…<br/><span>                               </span>&lt;item/&gt;<br/><span>                </span>&lt;/panel&gt;<br/><span>                </span>&lt;panel/&gt;<br/><span>                </span>...<br/><span>                </span>&lt;panel/&gt;<br/>&lt;/query_definition&gt;<br/>
   </td>
   <td>
   by copying the query and only replacing &lt;item&gt;s according to
@@ -14,7 +13,10 @@
  </tr>
 </table>
 
-
+```diff
++ this will be highlighted in green
+- this will be highlighted in red
+```
 
 <table>
  <tr>
