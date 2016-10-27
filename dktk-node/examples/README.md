@@ -19,7 +19,7 @@
 <table>
  <tr>
   <td>
-  <p>mapping type</p>
+  <p>mapping typeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
   </td>
   <td>
   <p>i2b2 source</p>
