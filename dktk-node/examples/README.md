@@ -14,10 +14,6 @@
 </table>
 
 ```diff
-+ this will be highlighted in green
-- this will be highlighted in red
-```
-
 <table>
  <tr>
   <td>
@@ -35,17 +31,17 @@
  </tr>
  <tr>
   <td>
-  Simple Key Mapping<br/><br/>Bsp.: Alter0-9 <span><span>--></span></span>
+  Simple Key Mapping<br/><br/>Bsp.: <br/>Alter0-9 <span><span>--></span></span>
   Alter0-9
   </td>
   <td rowspan="4">
-  &lt;item&gt;<br/><span>    </span><span>&lt;itemproperties/&gt;</span><br/><span>    </span>&lt;item_key&gt;<span>SOURCEKEY</span>&lt;/item_key&gt;<span></span><br/>&lt;/item&gt;
+  &lt;item&gt;<br/><span>    </span><span>&lt;itemproperties/&gt;</span><br/><span>    -</span>&lt;item_key&gt;<span>SOURCEKEY</span>&lt;/item_key&gt;<span></span><br/>&lt;/item&gt;
   </td>
   <td>
   &lt;i2b2&gt;<br/><span>    </span>&lt;key&gt;<span>SOURCEKEY</span>&lt;/key&gt;<br/>&lt;/i2b2&gt;<br/>&lt;local&gt;<br/><span>    </span>&lt;key&gt;<span>RESULTKEY</span>&lt;/key&gt;<br/>&lt;/local&gt;
   </td>
   <td>
-  &lt;item&gt;<br/><span>    </span><span>&lt;itemproperties/&gt;</span><br/><span>    </span>&lt;item_key&gt;<span>RESULTKEY</span>&lt;/item_key&gt;<br/>&lt;/item&gt;
+  &lt;item&gt;<br/><span>    </span><span>&lt;itemproperties/&gt;</span><br/><span>    +</span>&lt;item_key&gt;<span>RESULTKEY</span>&lt;/item_key&gt;<br/>&lt;/item&gt;
   </td>
  </tr>
  <tr>
@@ -86,6 +82,7 @@
   </td>
  </tr>
 </table>
+```
 
 <span>&lt;itemproperties/&gt; </span>= &lt;hlevel/&gt;,
 &lt;item_key/&gt;, &lt;item_name/&gt;, &lt;tooltip/&gt;, &lt;item_icon/&gt;, &lt;class/&gt;,
