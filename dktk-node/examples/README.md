@@ -1,94 +1,142 @@
-<table>
- <tr>
-  <td>
-  Translate
-  </td>
-  <td>
-  ___________________________________________________________________________<br/>&lt;query_definition&gt;<br/><span>                </span>&lt;query_name/&gt;<br/><span>                </span>&lt;query_timing/&gt;<br/><span>                </span>&lt;specificity_scale/&gt;<br/><span>                </span>&lt;panel&gt;<br/><span>                               </span>&lt;panel_number/&gt;<br/><span>                               </span>&lt;panel_accuracy_scale/&gt;<br/><span>                               </span>&lt;invert/&gt;<br/><span>                               </span>&lt;panel_timing/&gt;<br/><span>                </span><span>                </span>&lt;total_item_occurrences/&gt;<br/><span>                               </span>&lt;item/&gt;<br/><span>                               </span>&lt;item/&gt;<br/><span>                               </span>…<br/><span>                               </span>&lt;item/&gt;<br/><span>                </span>&lt;/panel&gt;<br/><span>                </span>&lt;panel/&gt;<br/><span>                </span>...<br/><span>                </span>&lt;panel/&gt;<br/>&lt;/query_definition&gt;<br/>
-  </td>
-  <td>
-  by copying the query and only replacing &lt;item&gt;s according to
-  the following mapping table description.
-  </td>
- </tr>
-</table>
+## Description
 
-<table>
- <tr>
-  <td>
-  ______________________________________________ mapping type
-  </td>
-  <td>
-  ______________________________________________ i2b2 source
-  </td>
-  <td>
-  ______________________________________________ mapentry
-  </td>
-  <td>
-  ______________________________________________ i2b2 result
-  </td>
- </tr>
- <tr>
-  <td>
-  Simple Key Mapping<br/><br/>Bsp.: <br/>Alter0-9 <span><span>--></span></span>
-  Alter0-9
-  </td>
-  <td rowspan="4">
-  &lt;item&gt;<br/><span>    </span><span>&lt;itemproperties/&gt;</span><br/><span>    </span>
-```diff
-- &lt;item_key&gt;<span>SOURCEKEY</span>&lt;/item_key&gt;
+i2b2_to_i2b2.xsl translates an i2b2 query according to the rules listed below. In the mapping xml file the user can specify what `<item>`s (identified by their subnode `<item_key>`) should be mapped. One `<item>` can be mapped to one or more local `<item>`s while every item's properties (subnodes) are copied exactly. Also `<item>`s can be extended by a `<constrain_by_value>` and/or `<constrain_by_modifier>` subnode.
+
+In general an i2b2 query looks like
+
 ```
-<span></span><br/>&lt;/item&gt;
-  </td>
-  <td>
-  &lt;i2b2&gt;<br/><span>    </span>&lt;key&gt;<span>SOURCEKEY</span>&lt;/key&gt;<br/>&lt;/i2b2&gt;<br/>&lt;local&gt;<br/><span>    </span>&lt;key&gt;<span>RESULTKEY</span>&lt;/key&gt;<br/>&lt;/local&gt;
-  </td>
-  <td>
-  &lt;item&gt;<br/><span>    </span><span>&lt;itemproperties/&gt;</span><br/><span>    </span>&lt;item_key&gt;<span>RESULTKEY</span>&lt;/item_key&gt;<br/>&lt;/item&gt;
-  </td>
- </tr>
- <tr>
-  <td>
-  Multi Key Mapping<br/><br/>example: Alter0-9 <span><span>--></span></span>
-  Alter0|Alter1|…|Alter9
-  </td>
-  <td>
-  &lt;i2b2&gt;<br/><span>    </span>&lt;key&gt;<span>SOURCEKEY</span>&lt;/key&gt;<br/>&lt;/i2b2&gt;<br/>&lt;local&gt;<br/><span>    </span>&lt;key&gt;<span>RESULTKEY</span>
-  <span>1</span>&lt;/key&gt;<br/>&lt;/local&gt;<br/>…<br/>&lt;local&gt;<br/><span>    </span>&lt;key&gt;<span>RESULTKEY n</span>&lt;/key&gt;<br/>&lt;/local&gt;
-  </td>
-  <td>
-  &lt;item&gt;<br/><span>    </span><span>&lt;itemproperties/&gt;</span><br/><span>    </span>&lt;item_key&gt;<span>RESULTKEY 1</span>&lt;/item_key&gt;<br/>&lt;/item&gt;<br/>…<br/>&lt;item&gt;<br/><span>    </span><span>&lt;itemproperties/&gt;</span><br/><span>    </span>&lt;item_key&gt;<span>RESULTKEY n</span>&lt;/item_key&gt;<br/>&lt;/item&gt;
-  </td>
- </tr>
- <tr>
-  <td>
-  Constrain Mapping
-  </td>
-  <td>
-  &lt;i2b2&gt;<br/><span>    </span>&lt;key&gt;<span>SOURCEKEY</span>&lt;/key&gt;<br/>&lt;/i2b2&gt;<br/>&lt;local&gt;<br/><span>    </span>&lt;key&gt;<span>RESULTKEY</span>&lt;/key&gt;<br/><span>    </span><span>&lt;constrain_by_value/&gt;</span><br/>&lt;/local&gt;
-  </td>
-  <td>
-  &lt;item&gt;<br/><span>    </span><span>&lt;itemproperties/&gt;</span><br/><span>    </span>&lt;item_key&gt;<span>RESULTKEY</span>&lt;/item_key&gt;<br/><span>    </span><span>&lt;constrain_by_value/&gt;</span><br/>&lt;/item&gt;
-  </td>
- </tr>
- <tr>
-  <td>
-  Modifier Mapping
-  </td>
-  <td>
-  &lt;i2b2&gt;<br/><span>    </span>&lt;key&gt;<span>SOURCEKEY</span>&lt;/key&gt;<br/>&lt;/i2b2&gt;<br/>&lt;local&gt;<br/><span>    </span>&lt;key&gt;<span>RESULTKEY</span>&lt;/key&gt;<br/><span>    </span><span>&lt;constrain_by_modifier&gt;</span><br/><span><span>       
-  </span>&lt;constrain_by_value/&gt;</span><br/><span>    </span><span>&lt;/constrain_by_modifier&gt;</span><br/>&lt;/local&gt;
-  </td>
-  <td>
-  &lt;item&gt;<br/><span>    </span><span>&lt;itemproperties/&gt;</span><br/><span>    </span>&lt;item_key&gt;<span>RESULTKEY</span>&lt;/item_key&gt;<br/><span>    </span><span>&lt;constrain_by_modifier&gt;</span><br/><span><span>       
-  </span>&lt;constrain_by_value/&gt;</span><br/><span>    </span><span>&lt;/constrain_by_modifier&gt;</span><br/>&lt;/item&gt;
-  </td>
- </tr>
-</table>
+<query_definition>
+	<query_name/>
+	<query_timing/>
+	<specificity_scale/>
+	<panel>
+		<panel_number/>
+		<panel_accuracy_scale/>
+		<invert/>
+		<panel_timing/>
+		<total_item_occurrences/>
+		<item/>
+		<item/>
+		…
+		<item/>
+	</panel>
+	<panel/>
+	...
+	<panel/>
+</query_definition>
+```
 
-<span>&lt;itemproperties/&gt; </span>= &lt;hlevel/&gt;,
-&lt;item_key/&gt;, &lt;item_name/&gt;, &lt;tooltip/&gt;, &lt;item_icon/&gt;, &lt;class/&gt;,
-&lt;constrain_by_value/&gt;, &lt;constrain_by_modifier/&gt;, &lt;item_is_synonym/&gt;,
-…
+where every `<item>` consists of an `<item_key>` and other item properties like `<hlevel/>`, `<item_key/>`, `<item_name/>`, `<tooltip/>`, `<item_icon/>`, `<class/>`, `<constrain_by_value/>`, `<constrain_by_modifier/>`, `<item_is_synonym/>`, etc.
 
-</div>
+## Translation Rules
+
+### Simple Key Mapping
+###### mapentry
+```
+<entry>
+    <i2b2>
+        <key>SOURCEKEY</key>
+    </i2b2>
+    <local>
+        <key>RESULTKEY</key>
+    </local>
+</entry>
+```
+###### replacement
+```diff
+<item>
+    itemproperties/subnodes
+-   <item_key>SOURCEKEY</item_key>
++   <item_key>RESULTKEY</item_key>
+</item>
+```
+
+### Multi Key Mapping
+###### mapentry
+```
+<entry>
+    <i2b2>
+        <key>SOURCEKEY</key>
+    </i2b2>
+    <local>
+        <key>RESULTKEY 1</key>
+    </local>
+    <local>
+        <key>RESULTKEY 2</key>
+    </local>
+    ...
+    <local>
+        <key>RESULTKEY n</key>
+    </local>
+</entry>
+```
+###### replacement
+```diff
+-<item>
+-   itemproperties/subnodes
+-   <item_key>SOURCEKEY</item_key>
+-</item>
++<item>
++   itemproperties/subnodes
++   <item_key>RESULTKEY 1</item_key>
++</item>
++<item>
++   itemproperties/subnodes
++   <item_key>RESULTKEY 2</item_key>
++</item>
++...
++<item>
++   itemproperties/subnodes
++   <item_key>RESULTKEY n</item_key>
++</item>
+```
+
+### Constrain Mapping
+###### mapentry
+```
+<entry>
+    <i2b2>
+        <key>SOURCEKEY</key>
+    </i2b2>
+    <local>
+        <key>RESULTKEY</key>
+        <constrain_by_value/>
+    </local>
+</entry>
+```
+###### replacement
+```diff
+<item>
+    itemproperties/subnodes
+-   <item_key>SOURCEKEY</item_key>
++   <item_key>RESULTKEY</item_key>
++   <constrain_by_value/>
+</item>
+```
+
+### Modifier Mapping
+###### mapentry
+```
+<entry>
+    <i2b2>
+        <key>SOURCEKEY</key>
+    </i2b2>
+    <local>
+        <key>RESULTKEY</key>
+        <constrain_by_modifier>
+            <constrain_by_value/>
+        </constrain_by_modifier>
+    </local>
+</entry>
+```
+###### replacement
+```diff
+<item>
+    itemproperties/subnodes
+-   <item_key>SOURCEKEY</item_key>
++   <item_key>RESULTKEY</item_key>
++   <constrain_by_modifier>
++       <constrain_by_value/>
++   </constrain_by_modifier>
+</item>
+```
