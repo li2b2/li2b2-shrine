@@ -16,6 +16,7 @@ import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import de.sekmi.li2b2.api.crc.QueryManager;
 import de.sekmi.li2b2.api.ont.Ontology;
 import de.sekmi.li2b2.api.pm.ProjectManager;
+import de.sekmi.li2b2.services.token.TokenManager;
 
 
 public class MyBinder extends AbstractBinder{
@@ -51,6 +52,7 @@ public class MyBinder extends AbstractBinder{
 		bind(qm).to(QueryManager.class);
 		bind(pm).to(ProjectManager.class);
 		bind(ont).to(Ontology.class);
+		bind(new TokenManagerImpl()).to(TokenManager.class);
 		// bind 
 		//bind(PMService.class).to(AbstractCell.class);
 		//bind(WorkplaceService.class).to(AbstractCell.class);

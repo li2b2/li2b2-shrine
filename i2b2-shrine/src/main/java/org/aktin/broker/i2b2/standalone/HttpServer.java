@@ -26,6 +26,7 @@ import de.sekmi.li2b2.api.pm.User;
 import de.sekmi.li2b2.services.OntologyService;
 import de.sekmi.li2b2.services.PMService;
 import de.sekmi.li2b2.services.QueryToolService;
+import de.sekmi.li2b2.services.Webadmin;
 import de.sekmi.li2b2.services.Webclient;
 import de.sekmi.li2b2.services.WorkplaceService;
 import de.sekmi.li2b2.services.impl.OntologyImpl;
@@ -60,6 +61,7 @@ public class HttpServer {
 		register(OntologyService.class);
 		// register webclient
 		register(Webclient.class);
+		register(Webadmin.class);
 
 		loadLi2b2Backend();
 	}
@@ -73,7 +75,7 @@ public class HttpServer {
 	}
 	private void loadLi2b2Backend() throws IOException{
 		pm = new ProjectManagerImpl();
-		User user = pm.addUser("demo", "i2b2demo");
+		User user = pm.addUser("demo");//, "i2b2demo");
 		user.setPassword("demouser".toCharArray());
 		pm.addProject("Demo", "li2b2 Demo").addUserRoles(user, "USER","EDITOR","DATA_AGG","DATA_DEID","DATA_OBFSC","DATA_LDS","DATA_PROT");
 		//pm.addProject("Demo2", "li2b2 Demo2").addUserRoles(user, "USER");		
