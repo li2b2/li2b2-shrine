@@ -82,7 +82,7 @@
 										<artifactItem>
 											<groupId>org.i2b2</groupId>
 											<artifactId>webclient</artifactId>
-											<version>1.7.07c</version>
+											<version>1.7.08</version>
 											<type>zip</type>
 										</artifactItem>
 									</artifactItems>
