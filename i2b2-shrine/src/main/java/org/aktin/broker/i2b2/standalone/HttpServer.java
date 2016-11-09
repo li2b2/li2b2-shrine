@@ -74,7 +74,7 @@ public class HttpServer {
 		pm = new ProjectManagerImpl();
 		User user = pm.addUser("demo");//, "i2b2demo");
 		user.setPassword("demouser".toCharArray());
-		pm.addProject("Demo", "li2b2 Demo").addUserRoles(user, "USER","EDITOR","DATA_PROT");
+		pm.addProject("Demo", "li2b2 Demo").addUserRoles(user, "USER","EDITOR","DATA_OBFSC","DATA_AGG");
 		//pm.addProject("Demo2", "li2b2 Demo2").addUserRoles(user, "USER");		
 		
 	}
