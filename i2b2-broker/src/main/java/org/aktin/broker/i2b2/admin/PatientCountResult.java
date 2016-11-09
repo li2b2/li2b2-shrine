@@ -9,6 +9,7 @@ import de.sekmi.li2b2.api.crc.QueryStatus;
 import de.sekmi.li2b2.api.crc.ResultType;
 
 public class PatientCountResult implements QueryResult{
+	public static final String MEDIA_TYPE = "text/vnd.aktin.patient-count";
 	private BrokerI2b2Execution exec;
 	private int patient_count;
 

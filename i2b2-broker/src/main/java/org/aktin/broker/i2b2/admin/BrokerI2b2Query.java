@@ -12,6 +12,7 @@ import javax.xml.bind.JAXB;
 
 import org.aktin.broker.client.BrokerAdmin;
 import org.aktin.broker.xml.RequestInfo;
+import org.aktin.broker.xml.RequestStatus;
 import org.aktin.broker.xml.RequestStatusInfo;
 import org.aktin.broker.xml.util.Util;
 import org.w3c.dom.Document;
@@ -109,6 +110,38 @@ public class BrokerI2b2Query implements Query {
 			exec.add(new BrokerI2b2Execution(this, status));
 		}
 		return exec;
+	}
+	/**
+	 * Calculate the total number of patients over all returned results / nodes
+	 *
+	 * @return total number of patients or {@code null} if no results were submitted
+	 * @throws IOException error retrieving/reading results
+	 */
+	public Integer calculateTotalPatientCount() throws IOException{
+		int total = 0;
+		int includedNodes = 0;
+		List<RequestStatusInfo> list = broker.listRequestStatus(info.getId());
+		for( RequestStatusInfo status : list ){
+			if( status.getStatus() != RequestStatus.completed ){
+				// we don't include unfinished requests in the total count.
+				// unfinished requests will not have any submitted data
+				continue;
+			}
+			// retrieve reported count
+			String count = broker.getResultString(info.getId(), status.node, PatientCountResult.MEDIA_TYPE);
+			// add if present
+			if( count != null ){
+				includedNodes ++;
+				total += Integer.parseInt(count);
+			}
+		}
+
+		// don't return a number if no results were retrieved
+		if( includedNodes == 0 ){
+			return null;
+		}else{
+			return total;
+		}
 	}
 
 }

@@ -76,7 +76,7 @@ public class BrokerI2b2Execution implements QueryExecution{
 
 	@Override
 	public List<? extends QueryResult> getResults() throws IOException {
-		String data = query.broker.getResultString(query.getId(), status.node, "text/vnd.aktin.patient-count");
+		String data = query.broker.getResultString(query.getId(), status.node, PatientCountResult.MEDIA_TYPE);
 		if( data == null ){
 			// no result
 			return Collections.emptyList();
