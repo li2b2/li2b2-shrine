@@ -79,8 +79,10 @@ public class RandomCountNode {
 			}
 			// retrieve definition
 			Document def = broker.getMyRequestDefinitionXml(request.getId(), MEDIA_TYPE_I2B2_QUERY_DEFINITION);
+			def.getDocumentElement(); // we don't actually use the definition
 			// retrieve result output list
 			String[] resultList = broker.getMyRequestDefinitionLines(request.getId(), MEDIA_TYPE_I2B2_RESULT_OUTPUT_LIST);
+			resultList.getClass(); // we ignore the result list, just return the patient count
 			// run query definition
 			int patientCount;
 			try {

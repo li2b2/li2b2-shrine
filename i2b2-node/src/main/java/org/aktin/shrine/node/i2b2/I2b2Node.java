@@ -56,9 +56,9 @@ public class I2b2Node extends AbstractNode{
 		this.i2b2 = client;
 		
 	}
-	private void issueWarning(String warning){
-		System.err.println("Warning: "+warning);
-	}
+//	private void issueWarning(String warning){
+//		System.err.println("Warning: "+warning);
+//	}
 	private void printError(String message, Throwable e){
 		e.printStackTrace();
 		System.err.println("Error: "+message);		
@@ -79,29 +79,29 @@ public class I2b2Node extends AbstractNode{
 	}
 	// TODO for second version, concatenate the results (each starting with <?xml)
 	// TODO for third version, add multiple result documents
-	private void postConcatenatedResults(RequestInfo request, MasterInstanceResult mir) throws IOException{
-		StringBuilder sb = new StringBuilder();
-		for( QueryResultInstance qr : mir.query_result_instance ){
-			switch( qr.query_result_type.display_type ){
-			case QueryResultType.I2B2_DISPLAY_CATNUM:
-				String doc;
-				try {
-					doc = i2b2.CRC().getResultDocument(qr.result_instance_id);
-				} catch (HiveException e) {
-					issueWarning("Unable to retrieve result document: "+e.getMessage());
-					continue;
-				}
-				sb.append(doc);
-				sb.append('\n');
-				break;
-			default:
-				issueWarning("Ignoring unsupported result type '"+qr.query_result_type.display_type+"': "+qr.query_result_type.description);
-			}
-
-		}
-		// submit results to aggregator
-		broker.putRequestResult(request.getId(), "application/vnd.i2b2.concat-results+xml", sb.toString());
-	}
+//	private void postConcatenatedResults(RequestInfo request, MasterInstanceResult mir) throws IOException{
+//		StringBuilder sb = new StringBuilder();
+//		for( QueryResultInstance qr : mir.query_result_instance ){
+//			switch( qr.query_result_type.display_type ){
+//			case QueryResultType.I2B2_DISPLAY_CATNUM:
+//				String doc;
+//				try {
+//					doc = i2b2.CRC().getResultDocument(qr.result_instance_id);
+//				} catch (HiveException e) {
+//					issueWarning("Unable to retrieve result document: "+e.getMessage());
+//					continue;
+//				}
+//				sb.append(doc);
+//				sb.append('\n');
+//				break;
+//			default:
+//				issueWarning("Ignoring unsupported result type '"+qr.query_result_type.display_type+"': "+qr.query_result_type.description);
+//			}
+//
+//		}
+//		// submit results to aggregator
+//		broker.putRequestResult(request.getId(), "application/vnd.i2b2.concat-results+xml", sb.toString());
+//	}
 	public void processRequests() throws IOException{
 		List<RequestInfo> requests = broker.listMyRequests();
 		// process requests synchronously. first come first serve
