@@ -1,6 +1,7 @@
 package org.aktin.broker.i2b2.standalone;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Paths;
 
 import javax.sql.DataSource;
@@ -16,6 +17,7 @@ import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import de.sekmi.li2b2.api.crc.QueryManager;
 import de.sekmi.li2b2.api.ont.Ontology;
 import de.sekmi.li2b2.api.pm.ProjectManager;
+import de.sekmi.li2b2.services.impl.OntologyImpl;
 import de.sekmi.li2b2.services.token.TokenManager;
 
 
@@ -25,12 +27,13 @@ public class MyBinder extends AbstractBinder{
 	private QueryManager qm;
 	private ProjectManager pm;
 	private Ontology ont;
+	private Configuration config;
 	
-	public MyBinder(DataSource ds, QueryManager qm, ProjectManager pm, Ontology ont){
+	public MyBinder(DataSource ds, QueryManager qm, ProjectManager pm, Configuration config){
 		this.qm = qm;
 		this.ds = ds;
 		this.pm = pm;
-		this.ont = ont;
+		this.config = config;
 	}
 	@Override
 	protected void configure() {
@@ -41,7 +44,7 @@ public class MyBinder extends AbstractBinder{
 		bind(new AuthCache(backend)).to(AuthCache.class);
 		try {
 			// TODO set aggregator data directory
-			AggregatorImpl adb = new AggregatorImpl(ds, Paths.get("target/aggregator-data"));
+			AggregatorImpl adb = new AggregatorImpl(ds, Paths.get(config.getAggregatorDataPath()));
 			bind(adb).to(AggregatorBackend.class);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -51,7 +54,15 @@ public class MyBinder extends AbstractBinder{
 		// bind li2b2 backend implementations
 		bind(qm).to(QueryManager.class);
 		bind(pm).to(ProjectManager.class);
+		
+		// ontology
+		try {
+			ont = OntologyImpl.parse(config.readOntologyXML());
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
 		bind(ont).to(Ontology.class);
+
 		bind(new TokenManagerImpl()).to(TokenManager.class);
 		// bind 
 		//bind(PMService.class).to(AbstractCell.class);

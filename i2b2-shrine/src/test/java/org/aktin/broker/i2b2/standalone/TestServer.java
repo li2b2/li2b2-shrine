@@ -21,6 +21,11 @@ public class TestServer implements Configuration{
 	}
 
 	@Override
+	public String getAggregatorDataPath() {
+		return "target/aggregator-data";
+	}
+
+	@Override
 	public int getPort() {
 		return 8080;
 	}

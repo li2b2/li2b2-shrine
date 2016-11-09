@@ -20,7 +20,6 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
 
-import de.sekmi.li2b2.api.ont.Ontology;
 import de.sekmi.li2b2.api.pm.ProjectManager;
 import de.sekmi.li2b2.api.pm.User;
 import de.sekmi.li2b2.services.OntologyService;
@@ -29,7 +28,6 @@ import de.sekmi.li2b2.services.QueryToolService;
 import de.sekmi.li2b2.services.Webadmin;
 import de.sekmi.li2b2.services.Webclient;
 import de.sekmi.li2b2.services.WorkplaceService;
-import de.sekmi.li2b2.services.impl.OntologyImpl;
 import de.sekmi.li2b2.services.impl.ProjectManagerImpl;
 import liquibase.exception.LiquibaseException;
 
@@ -40,7 +38,6 @@ public class HttpServer {
 	private DataSource ds;
 	private BrokerQueryManager qm;
 	private ProjectManager pm;
-	private Ontology ont;
 	
 	public HttpServer(Configuration config) throws SQLException, IOException{
 		this.config = config;
@@ -77,11 +74,9 @@ public class HttpServer {
 		pm = new ProjectManagerImpl();
 		User user = pm.addUser("demo");//, "i2b2demo");
 		user.setPassword("demouser".toCharArray());
-		pm.addProject("Demo", "li2b2 Demo").addUserRoles(user, "USER","EDITOR","DATA_AGG","DATA_DEID","DATA_OBFSC","DATA_LDS","DATA_PROT");
+		pm.addProject("Demo", "li2b2 Demo").addUserRoles(user, "USER","EDITOR","DATA_PROT");
 		//pm.addProject("Demo2", "li2b2 Demo2").addUserRoles(user, "USER");		
 		
-		// ontology
-		ont = OntologyImpl.parse(config.readOntologyXML());
 	}
 	public final void register(Class<?> componentClass){
 		rc.register(componentClass);
@@ -102,7 +97,7 @@ public class HttpServer {
 
 		// initialise query manager
 		qm = new BrokerQueryManager(new URI("http://localhost:"+addr.getPort()+"/broker/"));
-		rc.register(new MyBinder(ds, qm, pm, ont));
+		rc.register(new MyBinder(ds, qm, pm, config));
 
 		ServletHolder jersey = new ServletHolder(new ServletContainer(rc));
 //		jersey.setInitOrder(0);

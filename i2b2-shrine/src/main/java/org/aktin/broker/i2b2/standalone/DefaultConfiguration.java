@@ -26,4 +26,9 @@ public class DefaultConfiguration implements Configuration{
 		return 8080;
 	}
 
+	@Override
+	public String getAggregatorDataPath() {
+		return "aggregator-data";
+	}
+
 }
