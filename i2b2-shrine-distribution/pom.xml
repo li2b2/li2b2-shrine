@@ -1,29 +1,29 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<name>AKTIN : SHRINE : ASHRINE distribution</name>
+	<name>Li2b2 SHRINE : SHRINE server distribution</name>
 
 	<packaging>pom</packaging>
 
-	<groupId>org.aktin.shrine</groupId>
+	<groupId>de.li2b2.shrine</groupId>
 	<artifactId>i2b2-shrine-distributable</artifactId>
 	<version>0.1-SNAPSHOT</version>
 
 	<parent>
-		<groupId>org.aktin</groupId>
-		<artifactId>ashrine</artifactId>
+		<groupId>de.li2b2.shrine</groupId>
+		<artifactId>pom</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.aktin.shrine</groupId>
+			<groupId>de.li2b2.shrine</groupId>
 			<artifactId>i2b2-shrine</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-		    <groupId>javax.enterprise</groupId>
-		    <artifactId>cdi-api</artifactId>
-		    <version>1.2</version>
+			<groupId>javax.enterprise</groupId>
+			<artifactId>cdi-api</artifactId>
+			<version>1.2</version>
 		</dependency>
 	</dependencies>
 
