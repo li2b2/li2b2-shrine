@@ -1,0 +1,51 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<name>Li2b2 SHRINE : Query Translation</name>
+
+	<groupId>de.li2b2.shrine</groupId>
+	<artifactId>query-translation</artifactId>
+	<version>0.1-SNAPSHOT</version>
+
+	<description>
+		Translate i2b2 queries and map
+		concepts.
+	</description>
+	
+	
+	<parent>
+		<groupId>de.li2b2.shrine</groupId>
+		<artifactId>pom</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+	
+  
+	<build>
+		<plugins>
+			<!-- backward compatibility to Java 7  -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>de.sekmi.li2b2</groupId>
+			<artifactId>li2b2-client</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aktin</groupId>
+			<artifactId>broker-client</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+</project>
