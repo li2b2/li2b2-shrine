@@ -1,0 +1,23 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<packaging>pom</packaging>
+  
+	<name>Li2b2 SHRINE : Server</name>
+	<description>SHRINE server side components</description>
+	
+	<groupId>de.li2b2.shrine</groupId>
+	<artifactId>server-pom</artifactId>
+	<version>0.1-SNAPSHOT</version>
+
+	<parent>
+		<groupId>de.li2b2.shrine</groupId>
+		<artifactId>pom</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+
+	<modules>
+		<module>i2b2-broker</module>
+		<module>i2b2-shrine</module>
+		<module>i2b2-shrine-distribution</module>
+	</modules>
+</project>
