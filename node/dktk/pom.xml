@@ -2,22 +2,21 @@
 	<modelVersion>4.0.0</modelVersion>
 	<packaging>pom</packaging>
   
-	<name>Li2b2 SHRINE : Node</name>
-	<description>SHRINE client side components</description>
+	<name>Li2b2 SHRINE : Node : DKTK</name>
+	<description>SHRINE DKTK node components</description>
 	
 	<groupId>de.li2b2.shrine.node</groupId>
-	<artifactId>node-pom</artifactId>
+	<artifactId>dktk-pom</artifactId>
 	<version>0.1-SNAPSHOT</version>
 
 	<parent>
-		<groupId>de.li2b2.shrine</groupId>
-		<artifactId>pom</artifactId>
+		<groupId>de.li2b2.shrine.node</groupId>
+		<artifactId>node-pom</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
 	<modules>
-		<module>query-translation</module>
-		<module>i2b2</module>
-		<module>dktk</module>
+		<module>dktk-node</module>
+		<module>dktk-node-distribution</module>
 	</modules>
 </project>

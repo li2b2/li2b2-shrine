@@ -21,9 +21,11 @@
 <xsl:output indent="yes" method="xml" encoding="utf-8" omit-xml-declaration="no"/>
 <xsl:strip-space elements="*" />
 
-<!-- <xsl:param name="map" select="document('dktk_map.xml')"/> -->
+<xsl:param name="map" select="document('dktk_map.xml')"/>
+<!-- 
 <xsl:param name="mapURL" required="yes"/>
 <xsl:param name="map" select="document($mapURL)"/>
+-->
 
 <!-- im Falle von ns7:Between wird immer von <use_i2b2_constraint/> ausgegangen -->
 <xsl:template match="*">

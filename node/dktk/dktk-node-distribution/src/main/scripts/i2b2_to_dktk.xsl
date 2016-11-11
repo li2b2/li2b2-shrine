@@ -20,9 +20,11 @@
 <xsl:output indent="yes" method="xml" encoding="utf-8" omit-xml-declaration="no"/>
 <xsl:strip-space elements="*" />
 
+<!-- 
 <xsl:param name="mapURL" required="yes"/>
 <xsl:param name="map" select="document($mapURL)"/>
-<!-- <xsl:param name="map" select="document('dktk_map.xml')"/> -->
+-->
+<xsl:param name="map" select="document('dktk_map.xml')"/>
 
 <xsl:template name="mapping">
 	<!-- 	Variablen:

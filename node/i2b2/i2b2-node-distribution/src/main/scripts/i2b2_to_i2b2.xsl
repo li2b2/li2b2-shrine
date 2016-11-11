@@ -2,10 +2,11 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:output indent="yes" method="xml" encoding="utf-8" omit-xml-declaration="no"/>
 	<xsl:strip-space elements="*" />
-
+	<xsl:param name="map" select="document('i2b2_map.xml')"/>
+<!--
 	<xsl:param name="mapURL" required="yes"/>
 	<xsl:param name="map" select="document($mapURL)"/>
-
+-->
 	<xsl:template match="*">
 		<xsl:copy>
 			<xsl:apply-templates />

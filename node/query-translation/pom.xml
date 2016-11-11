@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<name>Li2b2 SHRINE : Node : Query Translation</name>
 
-	<groupId>de.li2b2.shrine</groupId>
+	<groupId>de.li2b2.shrine.node</groupId>
 	<artifactId>query-translation</artifactId>
 	<version>0.1-SNAPSHOT</version>
 
@@ -13,7 +13,7 @@
 	
 	
 	<parent>
-		<groupId>de.li2b2.shrine</groupId>
+		<groupId>de.li2b2.shrine.node</groupId>
 		<artifactId>node-pom</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
