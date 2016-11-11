@@ -10,7 +10,7 @@
 
 	<parent>
 		<groupId>de.li2b2.shrine.node</groupId>
-		<artifactId>i2b2-pom</artifactId>
+		<artifactId>dktk-pom</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
