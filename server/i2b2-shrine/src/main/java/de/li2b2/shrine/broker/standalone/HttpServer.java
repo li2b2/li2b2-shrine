@@ -125,13 +125,22 @@ public class HttpServer {
 	public static void main(String[] args) throws Exception{
 		// use port if specified
 		int port;
+		InetAddress bindaddr;
 		if( args.length == 0 ){
 			port = 8080;
+			bindaddr = InetAddress.getLoopbackAddress();
 		}else if( args.length == 1 ){
-			port = Integer.parseInt(args[0]);
+			int colon = args[0].indexOf(':');
+			if( colon == -1 ){
+				bindaddr = InetAddress.getLoopbackAddress();
+				port = Integer.parseInt(args[0]);
+			}else{
+				bindaddr = InetAddress.getByName(args[0].substring(0, colon));
+				port = Integer.parseInt(args[0].substring(colon+1));
+			}
 		}else{
 			System.err.println("Too many command line arguments!");
-			System.err.println("Usage: "+HttpServer.class.getCanonicalName()+" [port]");
+			System.err.println("Usage: "+HttpServer.class.getCanonicalName()+" [[hostname:]port]");
 			System.exit(-1);
 			return;
 		}
@@ -143,7 +152,7 @@ public class HttpServer {
 		// start server
 		HttpServer server = new HttpServer(new DefaultConfiguration());
 		try{
-			server.start(new InetSocketAddress(port));
+			server.start(new InetSocketAddress(bindaddr, port));
 			System.err.println("Broker service at: "+server.getBrokerServiceURI());
 			server.join();
 		}finally{
