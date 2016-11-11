@@ -9,10 +9,7 @@
 	<name>Li2b2 SHRINE</name>
 	<description>Asynchronous Shared Health Research Informatics NEtwork (ASHRINE). Replace the i2b2 SHRINE infrastructure with advanced technology.</description>
 	<modules>
-		<module>query-translation</module>
-		<module>i2b2-node</module>
-		<module>i2b2-node-distribution</module>
-		<module>dktk-node</module>
+		<module>node</module>
 		<module>server</module>
 	</modules>
 	<scm>
