@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-java -cp lib/\* org.aktin.broker.i2b2.standalone.HttpServer 8080
+java -cp lib/\* de.li2b2.shrine.broker.standalone.HttpServer 8080
