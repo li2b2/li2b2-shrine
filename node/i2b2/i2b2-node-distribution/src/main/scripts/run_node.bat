@@ -1,0 +1,6 @@
+@ECHO OFF
+
+java -cp lib\* de.li2b2.shrine.node.i2b2.I2b2Node http://localhost:8080/broker/ asdf123 'http://services.i2b2.org/i2b2/services/PMService/|https://www.i2b2.org/webclient/index.php' demo@i2b2demo demouser i2b2_to_i2b2.xsl
+ 
+REM for testing, you can use the random count node
+REM java -cp lib\* de.li2b2.shrine.node.i2b2.RandomCountNode http://localhost:8080/broker/ asdf123 
