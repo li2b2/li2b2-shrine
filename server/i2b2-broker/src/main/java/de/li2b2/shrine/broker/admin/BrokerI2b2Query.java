@@ -93,6 +93,7 @@ public class BrokerI2b2Query implements Query {
 
 	@Override
 	public void setDisplayName(String name) throws IOException{
+		// TODO will result in HTTP 500, FIXME
 		lazyLoadMetadata();
 		meta.displayName = name;
 		// write to broker

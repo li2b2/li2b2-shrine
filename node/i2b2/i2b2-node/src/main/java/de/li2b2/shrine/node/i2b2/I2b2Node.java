@@ -133,11 +133,11 @@ public class I2b2Node extends AbstractNode{
 			} catch (HiveException e) {
 				// report error message
 				printError("Query execution failed for request #"+request.getId(), e);
-				broker.postRequestStatus(request.getId(), RequestStatus.failed);
+				broker.postRequestFailed(request.getId(), "Query execution failed", e);
 				continue;
 			} catch (TransformerException e) {
 				printError("Query transformation failed for request #"+request.getId(), e);
-				broker.postRequestStatus(request.getId(), RequestStatus.failed);
+				broker.postRequestFailed(request.getId(), "Query transformation failed", e);
 				continue;
 			}
 			// retrieve results for primary instance as listed

@@ -189,12 +189,12 @@ public class CentraxxNode extends AbstractNode{
 				// print error
 				e.printStackTrace();
 				System.err.println("Query transformation failed: "+e.getMessage());
-				broker.postRequestStatus(request.getId(), RequestStatus.failed);
+				broker.postRequestFailed(request.getId(), "Query transformation failed", e);
 			}catch( IOException e ){
 				// print error
 				e.printStackTrace();
 				System.err.println("Unable to post query to centraxx: "+e.getMessage());
-				broker.postRequestStatus(request.getId(), RequestStatus.failed);
+				broker.postRequestFailed(request.getId(), "Unable to post query to centraxx", e);
 			}
 		}
 	}
@@ -221,15 +221,19 @@ public class CentraxxNode extends AbstractNode{
 					patientCount = Integer.parseInt(nl.item(0).getTextContent());
 				}else{
 					// no patient count found in stats
-					throw new NumberFormatException("No totalSize found in stats document");
+					throw new NumberFormatException("No totalSize element in stats document");
 				}
 			}catch( IOException e ){
 				// unable to retrieve result status
-				broker.postRequestStatus(requestId, RequestStatus.failed);
+				broker.postRequestFailed(requestId, "Unable to retrieve result status", e);
+				System.err.println("Reported error and stacktrace: Unable to retrieve result status");
+				e.printStackTrace();
 				continue;
 			}catch( NumberFormatException e ){
 				// unable to find patient count
-				broker.postRequestStatus(requestId, RequestStatus.failed);
+				broker.postRequestFailed(requestId, "Unable to determine patient count", e);
+				System.err.println("Reported error and stacktrace: Unable to determine patient count");
+				e.printStackTrace();
 				continue;
 			}
 			// post result
