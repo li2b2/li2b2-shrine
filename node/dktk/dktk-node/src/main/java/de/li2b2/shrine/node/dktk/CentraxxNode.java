@@ -94,11 +94,15 @@ public class CentraxxNode extends AbstractNode{
 			throw new IOException("Error while generating XML",e);
 		}
 		// TODO need to check response code?
+		System.out.println("Response code: "+c.getResponseCode());
 		
 		// make sure that the response code is in the 2xx family
 		c.getInputStream().close(); // will fail for other status codes
 
-		String location = c.getHeaderField("Location");		
+		String location = c.getHeaderField("Location");
+		if( location == null ){
+			throw new IOException("No 'Location' header in response from centraxx");
+		}
 		return location;
 	}
 
