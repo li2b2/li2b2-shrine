@@ -8,7 +8,7 @@ import javax.xml.transform.TransformerException;
 
 import org.aktin.broker.client.auth.HttpApiKeyAuth;
 
-public class TestServer {
+public class TestNode {
 
 	public static void main(String[] args) throws IOException, TransformerException, ParserConfigurationException{
 		String broker_service = args[0];
