@@ -42,11 +42,13 @@ public class CentraxxNode extends AbstractNode{
 	// maps pending broker ids to centrax query ids
 	private Map<String,String> pendingCentraxxQueries;
 	private String pendingFile;
+	private boolean verbose;
 
 
 	public CentraxxNode(URI centraxx_teiler, String pendingProperties) throws ParserConfigurationException{
 		this.centraxx_teiler = centraxx_teiler;
 		this.pendingFile = pendingProperties;
+		this.verbose = true;
 	}
 
 	public static void main(String[] args) throws Exception{
@@ -180,23 +182,31 @@ public class CentraxxNode extends AbstractNode{
 			try{
 				// transform to DKTK centraxx query
 				if( hasTransformer() ){
-					System.out.println("Applying transformation to query #"+request.getId());
+					if( verbose ){
+						System.out.println("Applying transformation to query #"+request.getId());
+					}
 					def = transform(def);
 				}
-				System.out.println("POSTing query #"+request.getId()+":");
-				Util.printDOM(def, System.out, "UTF-8");
+				if( verbose ){
+					System.out.println("POSTing query #"+request.getId());
+					Util.printDOM(def, System.out, "UTF-8");
+				}
 				String queryLocation = createCentraxxQuery(def);
 				pendingCentraxxQueries.put(request.getId(), queryLocation);
 				// notify broker of processing query
 				broker.postRequestStatus(request.getId(), RequestStatus.processing);
 			}catch( TransformerException e ){
 				// print error
-				e.printStackTrace();
-				System.err.println("Query transformation failed: "+e.getMessage());
+				if( verbose ){
+					e.printStackTrace();
+				}
+				System.err.println("Query #" + request.getId()+" transformation failed: "+e.getMessage());
 				broker.postRequestFailed(request.getId(), "Query transformation failed", e);
 			}catch( IOException e ){
 				// print error
-				e.printStackTrace();
+				if( verbose ){
+					e.printStackTrace();
+				}
 				System.err.println("Unable to post query to centraxx: "+e.getMessage());
 				broker.postRequestFailed(request.getId(), "Unable to post query to centraxx", e);
 			}
@@ -230,14 +240,18 @@ public class CentraxxNode extends AbstractNode{
 			}catch( IOException e ){
 				// unable to retrieve result status
 				broker.postRequestFailed(requestId, "Unable to retrieve result status", e);
-				System.err.println("Reported error and stacktrace: Unable to retrieve result status");
-				e.printStackTrace();
+				if( verbose ){
+					e.printStackTrace();
+					System.err.println("Reported error and stacktrace: Unable to retrieve result status");
+				}
 				continue;
 			}catch( NumberFormatException e ){
 				// unable to find patient count
 				broker.postRequestFailed(requestId, "Unable to determine patient count", e);
-				System.err.println("Reported error and stacktrace: Unable to determine patient count");
-				e.printStackTrace();
+				if( verbose ){
+					e.printStackTrace();
+					System.err.println("Reported error and stacktrace: Unable to determine patient count");
+				}
 				continue;
 			}
 			// post result
