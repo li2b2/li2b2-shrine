@@ -202,6 +202,8 @@ public class CentraxxNode extends AbstractNode{
 				}
 				System.err.println("Query #" + request.getId()+" transformation failed: "+e.getMessage());
 				broker.postRequestFailed(request.getId(), "Query transformation failed", e);
+				// remove from queue
+				broker.deleteMyRequest(request.getId());
 			}catch( IOException e ){
 				// print error
 				if( verbose ){
@@ -209,7 +211,10 @@ public class CentraxxNode extends AbstractNode{
 				}
 				System.err.println("Unable to post query to centraxx: "+e.getMessage());
 				broker.postRequestFailed(request.getId(), "Unable to post query to centraxx", e);
+				// remove from queue
+				broker.deleteMyRequest(request.getId());
 			}
+			
 		}
 	}
 
@@ -219,8 +224,8 @@ public class CentraxxNode extends AbstractNode{
 		while( pending.hasNext() ){
 			Entry<String,String> entry = pending.next();
 			String requestId = entry.getKey();
-			int patientCount;
 			try{
+				int patientCount;
 				Document doc = retrieveCentraxxQueryStatus(entry.getValue());
 				if( doc == null ){
 					// still processing
@@ -237,6 +242,14 @@ public class CentraxxNode extends AbstractNode{
 					// no patient count found in stats
 					throw new NumberFormatException("No totalSize element in stats document");
 				}
+				if( verbose ){
+					System.out.println("Request #"+requestId+" patients count: "+patientCount);
+				}
+				// post result
+				broker.putRequestResult(requestId, "text/vnd.aktin.patient-count", Integer.toString(patientCount));
+				// report completed
+				broker.postRequestStatus(requestId, RequestStatus.completed);
+
 			}catch( IOException e ){
 				// unable to retrieve result status
 				broker.postRequestFailed(requestId, "Unable to retrieve result status", e);
@@ -244,7 +257,6 @@ public class CentraxxNode extends AbstractNode{
 					e.printStackTrace();
 					System.err.println("Reported error and stacktrace: Unable to retrieve result status");
 				}
-				continue;
 			}catch( NumberFormatException e ){
 				// unable to find patient count
 				broker.postRequestFailed(requestId, "Unable to determine patient count", e);
@@ -252,12 +264,7 @@ public class CentraxxNode extends AbstractNode{
 					e.printStackTrace();
 					System.err.println("Reported error and stacktrace: Unable to determine patient count");
 				}
-				continue;
 			}
-			// post result
-			broker.putRequestResult(requestId, "text/vnd.aktin.patient-count", Integer.toString(patientCount));
-			// report completed
-			broker.postRequestStatus(requestId, RequestStatus.completed);
 			System.out.println("Completed request #"+requestId);
 			// delete request
 			broker.deleteMyRequest(requestId);
