@@ -83,11 +83,11 @@
 			<key>specimen/tissue</key>
 		</i2b2>
 		<local>
-			<key>\\i2b2\i2b2\BIO\CCC\</key>
+			<key>\\i2b2_DIAG\i2b2\Diagnoses\Circulatory system (390-459)\</key>
 			<constrain_by_modifier>
-				<modifier_name>Gewebe</modifier_name>
-				<applied_path>\i2b2\BIO\CCC\</applied_path>
-				<modifier_key>\\i2b2\PRTYP\TIS\</modifier_key>
+				<modifier_name>Admit Diagnosis</modifier_name>
+				<applied_path>\i2b2\Diagnoses\Circulatory system (390-459)\%</applied_path>
+				<modifier_key>\\i2b2_DIAG\Admit Diagnosis\</modifier_key>
 			</constrain_by_modifier>
 		</local>
 	</entry>
