@@ -92,6 +92,9 @@ where every `<item>` consists of an `<item_key>` and other item properties like 
 ```
 
 ### Constrain Mapping
+Any content or elements inside the `constrain_by_value` element are
+copied to the target document.
+
 ###### mapentry
 ```
 <entry>
@@ -100,7 +103,7 @@ where every `<item>` consists of an `<item_key>` and other item properties like 
     </i2b2>
     <local>
         <key>RESULTKEY</key>
-        <constrain_by_value/>
+        <constrain_by_value>...</constrain_by_value>
     </local>
 </entry>
 ```
@@ -110,11 +113,15 @@ where every `<item>` consists of an `<item_key>` and other item properties like 
     itemproperties/subnodes
 -   <item_key>SOURCEKEY</item_key>
 +   <item_key>RESULTKEY</item_key>
-+   <constrain_by_value/>
++   <constrain_by_value>...</constrain_by_value>
 </item>
 ```
 
 ### Modifier Mapping
+Any content or elements inside the `constrain_by_modifier` element are
+copied to the target document. This includes additional value constraints
+inside the modifier constraint.
+
 ###### mapentry
 ```
 <entry>
@@ -124,7 +131,7 @@ where every `<item>` consists of an `<item_key>` and other item properties like 
     <local>
         <key>RESULTKEY</key>
         <constrain_by_modifier>
-            <constrain_by_value/>
+            ...
         </constrain_by_modifier>
     </local>
 </entry>
@@ -136,7 +143,7 @@ where every `<item>` consists of an `<item_key>` and other item properties like 
 -   <item_key>SOURCEKEY</item_key>
 +   <item_key>RESULTKEY</item_key>
 +   <constrain_by_modifier>
-+       <constrain_by_value/>
++       ...
 +   </constrain_by_modifier>
 </item>
 ```
