@@ -229,13 +229,7 @@ public class I2b2Node extends AbstractNode{
 		System.out.println("  E.g. for mapping query concept keys to local");
 		System.out.println("  metadata ontology.");
 	}
-	/**
-	 * 
-	 * To run this via the Harvard demo i2b2 server, use the following 
-	 * command line arguments: {@code java org.aktin.broker.i2b2.node.Application http://services.i2b2.org/i2b2/services/PMService/ demo@i2b2demo demouser 
-	 * @param args
-	 * @throws Exception
-	 */
+
 	public static void main(String[] args) throws Exception{
 		if( args.length < 5 || args.length > 6 ){
 			printUsage();
