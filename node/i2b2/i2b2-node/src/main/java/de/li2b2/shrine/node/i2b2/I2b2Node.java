@@ -179,33 +179,32 @@ public class I2b2Node extends AbstractNode{
 			// retrieve result output list
 			String[] resultList = broker.getMyRequestDefinitionLines(request.getId(), MEDIA_TYPE_I2B2_RESULT_OUTPUT_LIST);
 			// run query definition
-			MasterInstanceResult mir;
 			try {
+				broker.postRequestStatus(request.getId(), RequestStatus.processing);
+				// transform query
 				if( hasTransformer() ){
 					System.out.println("Applying transformation..");
 					def = transform(def);
 				}
 				System.out.println("Running query #"+request.getId());
 				Util.printDOM(def, System.out, "UTF-8");
+				MasterInstanceResult mir;
 				mir = i2b2.CRC().runQueryInstance(def.getDocumentElement(), resultList);
+				// retrieve results for primary instance as listed
+				// this first version only reports the patient count as extracted from set_size
+				postOnlyPatientCount(request, mir);
+				// 
+				// report completed
+				broker.postRequestStatus(request.getId(), RequestStatus.completed);
+				System.out.println("Completed request #"+request.getId());
 			} catch (HiveException e) {
 				// report error message
 				printError("Query execution failed for request #"+request.getId(), e);
 				broker.postRequestFailed(request.getId(), "Query execution failed", e);
-				continue;
 			} catch (TransformerException e) {
 				printError("Query transformation failed for request #"+request.getId(), e);
 				broker.postRequestFailed(request.getId(), "Query transformation failed", e);
-				continue;
 			}
-			// retrieve results for primary instance as listed
-			// this first version only reports the patient count as extracted from set_size
-			postOnlyPatientCount(request, mir);
-			// 
-			// report completed
-			broker.postRequestStatus(request.getId(), RequestStatus.completed);
-			
-			System.out.println("Completed request #"+request.getId());
 			// delete request
 			broker.deleteMyRequest(request.getId());
 		}
