@@ -13,7 +13,7 @@
 		<module>server</module>
 	</modules>
 	<scm>
-		<developerConnection>scm:git:git@github.com:rwm/li2b2-shrine.git</developerConnection>
+		<developerConnection>scm:git:git@github.com:li2b2/li2b2-shrine.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
 	<properties>
