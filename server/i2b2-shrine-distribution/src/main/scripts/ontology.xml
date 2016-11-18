@@ -19,6 +19,7 @@
 		<narrower>
 			<concept key="specimen/plasma"><name>Plasma</name></concept>
 			<concept key="specimen/serum"><name>Serum</name></concept>
+			<concept key="specimen/tissue"><name>Tissue</name></concept>
 		</narrower>
 	</concept>
 </ontology>
