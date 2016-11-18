@@ -109,6 +109,7 @@ public class I2b2Node extends AbstractNode{
 		System.out.println("Patient count for request #"+request.getId()+" is "+count);
 		broker.putRequestResult(request.getId(), "text/vnd.aktin.patient-count", Objects.toString(count));
 	}
+
 	// TODO for second version, concatenate the results (each starting with <?xml)
 	// TODO for third version, add multiple result documents
 //	private void postConcatenatedResults(RequestInfo request, MasterInstanceResult mir) throws IOException{
@@ -187,7 +188,7 @@ public class I2b2Node extends AbstractNode{
 	}
 
 	private static void printUsage(){
-		System.out.println("Usage: 'de...I2b2Node' broker_endpoint_url broker_api_key i2b2_pm_service_url['|'i2b2_proxy_url] i2b2_user'@'domain['/'project] i2b2_password");
+		System.out.println("Usage: 'de...I2b2Node' broker_endpoint_url broker_api_key i2b2_pm_service_url['|'i2b2_proxy_url] i2b2_user'@'domain['/'project] i2b2_password [query_xslt_file]");
 		System.out.println();
 		System.out.println(" *i2b2_proxy_url* is not a normal HTTP proxy,");
 		System.out.println("  but an i2b2-specific servicee. If is specified");
@@ -198,6 +199,11 @@ public class I2b2Node extends AbstractNode{
 		System.out.println("  E.g. 'demo@i2b2demo/Demo'. If no project is");
 		System.out.println("  specified, the first project returned by the");
 		System.out.println("  server is used.");
+		System.out.println();
+		System.out.println(" *query_xslt_file* can be provided to transform");
+		System.out.println("  the retrieved query_definition XML document.");
+		System.out.println("  E.g. for mapping query concept keys to local");
+		System.out.println("  metadata ontology.");
 	}
 	/**
 	 * 
@@ -207,7 +213,7 @@ public class I2b2Node extends AbstractNode{
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception{
-		if( args.length != 5 ){
+		if( args.length < 5 || args.length > 6 ){
 			printUsage();
 			System.exit(-1);
 		}
@@ -252,6 +258,7 @@ public class I2b2Node extends AbstractNode{
 		
 		app.connectI2b2(i2b2_proxy, i2b2_pm_service, i2b2_user, i2b2_pass, i2b2_domain, i2b2_project);
 		app.connectBroker(broker_service, HttpApiKeyAuth.newBearer(broker_key));
+		// TODO first ask broker, if no queries are there, no need to continue
 		app.processRequests();
 	}
 
