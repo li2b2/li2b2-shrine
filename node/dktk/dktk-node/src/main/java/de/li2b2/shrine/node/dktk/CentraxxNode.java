@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -140,6 +141,17 @@ public class CentraxxNode extends AbstractNode{
 			}
 		case 202: // query still executing
 			return null;
+		case 422: // query execution failed
+			// retrieve error XML content
+			String errorMessage;
+			try( InputStream in = c.getErrorStream();
+					InputStreamReader r = new InputStreamReader(in, StandardCharsets.UTF_8) ){
+				Document dom = Util.parseDocument(r);
+				errorMessage = "CentraXX error: "+dom.getTextContent();
+			}catch( IOException e ){
+				throw new IOException("Query failed, but unable to retrieve error message", e);
+			}
+			throw new IOException(errorMessage);
 		default:
 			// other error
 			throw new IOException("Unexpected response code: "+c.getResponseCode());
