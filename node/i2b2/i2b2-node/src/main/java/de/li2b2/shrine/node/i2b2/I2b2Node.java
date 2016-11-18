@@ -34,7 +34,22 @@ public class I2b2Node extends AbstractNode{
 	
 	public I2b2Node() throws ParserConfigurationException{
 	}
-	public void connectI2b2(String proxy, String pm_service, String user, String domain, String password) throws IOException, ErrorResponseException, HiveException{
+
+	/**
+	 * Establish a temporary connection to the specified i2b2 server with the specified
+	 * credentials and load the configuration and user session information.
+	 *
+	 * @param proxy proxy URL string (optional)
+	 * @param pm_service Project management service URL
+	 * @param user user name
+	 * @param password user password
+	 * @param domain server domain id (as advertised by the server)
+	 * @param projectId project id (optional)
+	 * @throws IOException IO error
+	 * @throws ErrorResponseException authentication failed
+	 * @throws HiveException other communications error
+	 */
+	public void connectI2b2(String proxy, String pm_service, String user, String password, String domain, String projectId) throws IOException, ErrorResponseException, HiveException{
 		Li2b2Client client = new Li2b2Client();
 		if( proxy != null ){
 			System.out.println("Using proxy "+proxy);
@@ -43,14 +58,31 @@ public class I2b2Node extends AbstractNode{
 		client.setAuthorisation(user, password, domain);
 		client.setPM(new URL(pm_service));
 		UserConfiguration uc = client.PM().requestUserConfiguration();
-		// set project
+		// find project
+		int projectIndex = -1;
 		UserProject[] projects = uc.getProjects();
-		if( projects != null ){
+		Objects.requireNonNull(projects, "Server did not return any projects");
+		if( projectId == null ){
 			// use first project
-			client.setProjectId(projects[0].id);
-			System.out.println("Project:"+projects[0].id);
-			System.out.println("Roles:"+Arrays.toString(projects[0].role));
+			projectIndex = 0;
+		}else{
+			// find project by id string
+			for( int i=0; i<projects.length; i++ ){
+				if( projects[i].id.equals(projectId) ){
+					// found a match!
+					projectIndex = i;
+					break;
+				}
+			}
 		}
+		if( projectIndex == -1 ){
+			// specified project not found in server response
+			throw new IOException("Project not found in server response: "+projectId);
+		}
+		client.setProjectId(projects[0].id);
+		System.out.println("Project:"+projects[0].id);
+		System.out.println("Roles:"+Arrays.toString(projects[0].role));
+
 		// set services
 		client.setServices(uc.getCells());
 		this.i2b2 = client;
@@ -154,15 +186,31 @@ public class I2b2Node extends AbstractNode{
 		
 	}
 
+	private static void printUsage(){
+		System.out.println("Usage: 'de...I2b2Node' broker_endpoint_url broker_api_key i2b2_pm_service_url['|'i2b2_proxy_url] i2b2_user'@'domain['/'project] i2b2_password");
+		System.out.println();
+		System.out.println(" *i2b2_proxy_url* is not a normal HTTP proxy,");
+		System.out.println("  but an i2b2-specific servicee. If is specified");
+		System.out.println("  all cell communications is done via POST to");
+		System.out.println("  the i2b2_proxy_url.");
+		System.out.println();
+		System.out.println(" *project* can be specified via the user argument.");
+		System.out.println("  E.g. 'demo@i2b2demo/Demo'. If no project is");
+		System.out.println("  specified, the first project returned by the");
+		System.out.println("  server is used.");
+	}
 	/**
 	 * 
-	 * To run this via the harvard demo i2b2 server, use the following 
-	 * command line argumenst: {@code java org.aktin.broker.i2b2.node.Application http://services.i2b2.org/i2b2/services/PMService/ demo@i2b2demo demouser 
+	 * To run this via the Harvard demo i2b2 server, use the following 
+	 * command line arguments: {@code java org.aktin.broker.i2b2.node.Application http://services.i2b2.org/i2b2/services/PMService/ demo@i2b2demo demouser 
 	 * @param args
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception{
-		// TODO Auto-generated method stub
+		if( args.length != 5 ){
+			printUsage();
+			System.exit(-1);
+		}
 		String broker_service = args[0];
 		String broker_key = args[1];
 		String i2b2_pm_service = args[2];
@@ -171,11 +219,21 @@ public class I2b2Node extends AbstractNode{
 
 		// setup i2b2 client
 		String i2b2_domain = null;
-		// use domain name, if provided
+		// domain name is required
 		int at = i2b2_user.indexOf('@');
+		if( at == -1 ){
+			System.err.println("User domain must be specified in the fourth argument via '@'. E.g. demo@i2b2demo");
+			System.exit(-1);
+		}
+		i2b2_domain = i2b2_user.substring(at+1);
+		i2b2_user = i2b2_user.substring(0, at);
+		// use project name, if provided
+		String i2b2_project = null;
+		at = i2b2_domain.indexOf('/');
 		if( at != -1 ){
-			i2b2_domain = i2b2_user.substring(at+1);
-			i2b2_user = i2b2_user.substring(0, at);
+			// project specified
+			i2b2_project = i2b2_domain.substring(at+1);
+			i2b2_domain = i2b2_domain.substring(0, at);
 		}
 
 		// extract proxy if specified
@@ -192,7 +250,7 @@ public class I2b2Node extends AbstractNode{
 			app.loadTransformer(args[5]);
 		}
 		
-		app.connectI2b2(i2b2_proxy, i2b2_pm_service, i2b2_user, i2b2_domain, i2b2_pass);
+		app.connectI2b2(i2b2_proxy, i2b2_pm_service, i2b2_user, i2b2_pass, i2b2_domain, i2b2_project);
 		app.connectBroker(broker_service, HttpApiKeyAuth.newBearer(broker_key));
 		app.processRequests();
 	}
