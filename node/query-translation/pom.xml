@@ -38,11 +38,6 @@
 			<artifactId>junit</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>de.sekmi.li2b2</groupId>
-			<artifactId>li2b2-client</artifactId>
-			<version>0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>org.aktin</groupId>
 			<artifactId>broker-client</artifactId>
 			<version>0.1-SNAPSHOT</version>

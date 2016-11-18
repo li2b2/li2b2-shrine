@@ -33,7 +33,7 @@
 			<artifactId>junit</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>de.sekmi.li2b2</groupId>
+			<groupId>de.li2b2.facade</groupId>
 			<artifactId>li2b2-api</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
