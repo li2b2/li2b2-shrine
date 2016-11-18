@@ -3,6 +3,7 @@ package de.li2b2.shrine.node.i2b2;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,11 +27,12 @@ import de.sekmi.li2b2.hive.crc.QueryResultType;
 import de.sekmi.li2b2.hive.pm.UserProject;
 
 public class I2b2Node extends AbstractNode{
-	Li2b2Client i2b2;
-
 	private static final String MEDIA_TYPE_I2B2_QUERY_DEFINITION = "text/vnd.i2b2.query-definition+xml";
 	private static final String MEDIA_TYPE_I2B2_RESULT_OUTPUT_LIST = "text/vnd.i2b2.result-output-list";
 //	private static final String MEDIA_TYPE_I2B2_RESULT_ENVELOPE = "text/vnd.i2b2.result-envelope+xml";
+
+	Li2b2Client i2b2;
+	private List<RequestInfo> requests;
 	
 	public I2b2Node() throws ParserConfigurationException{
 	}
@@ -135,20 +137,43 @@ public class I2b2Node extends AbstractNode{
 //		// submit results to aggregator
 //		broker.putRequestResult(request.getId(), "application/vnd.i2b2.concat-results+xml", sb.toString());
 //	}
-	public void processRequests() throws IOException{
-		List<RequestInfo> requests = broker.listMyRequests();
-		// process requests synchronously. first come first serve
-		for( RequestInfo request : requests ){
+	/**
+	 * Load requests from the broker and preprocess
+	 * the list so only processable requests are remaining.
+	 * @throws IOException IO error
+	 */
+	private void loadRequests() throws IOException{
+		requests = broker.listMyRequests();
+		// remove unprocessable requests from list
+		Iterator<RequestInfo> iter = requests.iterator();
+		while( iter.hasNext() ){
+			RequestInfo request = iter.next();
 			// check media type
 			if( !request.hasMediaType(MEDIA_TYPE_I2B2_QUERY_DEFINITION) ){
 				// need query definition
 				System.err.println("Unable to process query "+request.getId()+" without "+MEDIA_TYPE_I2B2_QUERY_DEFINITION);
-				continue;
+				iter.remove();
 			}else if( !request.hasMediaType(MEDIA_TYPE_I2B2_RESULT_OUTPUT_LIST) ){
 				// need output list
 				System.err.println("Unable to process query "+request.getId()+" without "+MEDIA_TYPE_I2B2_RESULT_OUTPUT_LIST);
-				continue;
+				iter.remove();
 			}
+		}
+	}
+	/**
+	 * Whether or not we have requests to process.
+	 * @return {@code true} if there are processable requests in the queue, {@code false} otherwise.
+	 */
+	private boolean hasRequests(){
+		return !requests.isEmpty();
+	}
+	/**
+	 * Process pending requests.
+	 * @throws IOException IO error
+	 */
+	private void processRequests() throws IOException{
+		// process requests synchronously. first come first serve
+		for( RequestInfo request : requests ){
 			// retrieve definition
 			Document def = broker.getMyRequestDefinitionXml(request.getId(), MEDIA_TYPE_I2B2_QUERY_DEFINITION);
 			// retrieve result output list
@@ -256,10 +281,14 @@ public class I2b2Node extends AbstractNode{
 			app.loadTransformer(args[5]);
 		}
 		
-		app.connectI2b2(i2b2_proxy, i2b2_pm_service, i2b2_user, i2b2_pass, i2b2_domain, i2b2_project);
 		app.connectBroker(broker_service, HttpApiKeyAuth.newBearer(broker_key));
-		// TODO first ask broker, if no queries are there, no need to continue
-		app.processRequests();
+		app.loadRequests();
+		// only connect to i2b2 if there are requests to process
+		if( app.hasRequests() ){
+			// do some work
+			app.connectI2b2(i2b2_proxy, i2b2_pm_service, i2b2_user, i2b2_pass, i2b2_domain, i2b2_project);
+			app.processRequests();
+		}
 	}
 
 }
