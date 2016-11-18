@@ -3,22 +3,55 @@
 	<packaging>pom</packaging>
 	
 	<groupId>de.li2b2.shrine</groupId>
-	<artifactId>pom</artifactId>
+	<artifactId>li2b2-shrine</artifactId>
 	<version>0.1-SNAPSHOT</version>
   
 	<name>Li2b2 SHRINE</name>
 	<description>Asynchronous Shared Health Research Informatics NEtwork (ASHRINE). Replace the i2b2 SHRINE infrastructure with advanced technology.</description>
+
+	<url>https://github.com/li2b2/li2b2-shrine</url>
+	
+  	<inceptionYear>2016</inceptionYear>
+  	<organization>
+		<name>R.W.Majeed</name>
+	</organization>
+	<developers>
+		<developer>
+			<name>R.W.Majeed</name>
+			<email>raphael.majeed (a) chiru.med.uni-giessen.de</email>
+			<organization>Deutsches Zentrum f. Lungenforschung</organization>
+			<organizationUrl>https://www.dzl.de/</organizationUrl>
+		</developer>
+	</developers>
+
 	<modules>
 		<module>node</module>
 		<module>server</module>
 	</modules>
+
 	<scm>
 		<developerConnection>scm:git:git@github.com:li2b2/li2b2-shrine.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
+	<distributionManagement>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+		</repository>
+	</distributionManagement>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+			<comments>A business-friendly OSS license</comments>
+		</license>
+	</licenses>
+
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -51,10 +84,80 @@
 					<artifactId>jaxb2-maven-plugin</artifactId>
 					<version>2.2</version>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>3.0.1</version>
+					<executions>
+						<execution>
+							<id>attach-sources</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<!-- forces newer version, old 2.3.2 contains bugs -->
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>2.5.2</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-gpg-plugin</artifactId>
+					<version>1.6</version>
+				</plugin>
 			</plugins>
 
 		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+			</plugin>
+		</plugins>
+
 	</build>
+	<!-- profile which signs artifacts only during release -->
+	<profiles>
+		<profile>
+			<id>release-sign-artifacts</id>
+			<activation>
+				<property>
+					<name>performRelease</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
+			</plugin>
+		</plugins>
+	</reporting>
+
 	<dependencyManagement>
 		<!-- dependency version+scope inherited by child projects -->
 		<dependencies>
