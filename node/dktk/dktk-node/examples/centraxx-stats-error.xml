@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Error errorCode="1003" xmlns:ns2="http://schema.samply.de/ccp/MdrKey"
+	xmlns="http://schema.samply.de/ccp/Error">
+	<Description xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">MDR Keys are not supported for request.</Description>
+	<ns2:MdrKey>urn:dktk:dataelement:1000000:*</ns2:MdrKey>
+</Error>
