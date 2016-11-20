@@ -2,6 +2,7 @@ package de.li2b2.shrine.broker.admin;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -21,7 +22,7 @@ public class StatusBreakdown implements QueryResult{
 
 	public StatusBreakdown(int knownNodes, List<RequestStatusInfo> statusList) {
 		this.knownNodes = knownNodes;
-		this.breakdown = new HashMap<>();
+		this.breakdown = new LinkedHashMap<>();
 		fillBreakdown(knownNodes, statusList);
 	}
 
