@@ -30,8 +30,10 @@
 	</modules>
 
 	<scm>
+		<connection>scm:git:git@github.com:li2b2/li2b2-shrine.git</connection>
 		<developerConnection>scm:git:git@github.com:li2b2/li2b2-shrine.git</developerConnection>
 		<tag>HEAD</tag>
+		<url>https://github.com/li2b2/li2b2-shrine</url>
 	</scm>
 	<distributionManagement>
 		<repository>
