@@ -3,7 +3,7 @@
 	<packaging>pom</packaging>
 	
 	<groupId>de.li2b2.shrine</groupId>
-	<artifactId>li2b2-shrine</artifactId>
+	<artifactId>shrine-pom</artifactId>
 	<version>0.1-SNAPSHOT</version>
   
 	<name>Li2b2 SHRINE</name>
