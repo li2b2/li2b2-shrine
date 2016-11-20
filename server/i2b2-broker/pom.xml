@@ -4,7 +4,7 @@
 
 	<groupId>de.li2b2.shrine</groupId>
 	<artifactId>i2b2-broker</artifactId>
-	<version>0.1-SNAPSHOT</version>
+	<version>0.1</version>
 
 	<description>
 		Exposes i2b2 webservice APIs to distribute
@@ -19,7 +19,7 @@
 	<parent>
 		<groupId>de.li2b2.shrine</groupId>
 		<artifactId>server-pom</artifactId>
-		<version>0.1-SNAPSHOT</version>
+		<version>0.1</version>
 	</parent>
 	
   
@@ -35,12 +35,12 @@
 		<dependency>
 			<groupId>de.li2b2.facade</groupId>
 			<artifactId>li2b2-api</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<version>0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.aktin</groupId>
 			<artifactId>broker-client</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<version>0.1</version>
 		</dependency>
 	</dependencies>
 </project>

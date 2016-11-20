@@ -4,7 +4,7 @@
 
 	<groupId>de.li2b2.shrine.node</groupId>
 	<artifactId>shrine-i2b2-node</artifactId>
-	<version>0.1-SNAPSHOT</version>
+	<version>0.1</version>
 
 	<description>
 		Retrieve federated queries from an AKTIN shrine 
@@ -17,7 +17,7 @@
 	<parent>
 		<groupId>de.li2b2.shrine.node</groupId>
 		<artifactId>i2b2-pom</artifactId>
-		<version>0.1-SNAPSHOT</version>
+		<version>0.1</version>
 	</parent>
 
 	<dependencies>
@@ -28,12 +28,12 @@
 		<dependency>
 			<groupId>de.li2b2.facade</groupId>
 			<artifactId>li2b2-client</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<version>0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.aktin</groupId>
 			<artifactId>broker-client</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<version>0.1</version>
 		</dependency>
 	</dependencies>
 </project>

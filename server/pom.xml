@@ -7,12 +7,12 @@
 	
 	<groupId>de.li2b2.shrine</groupId>
 	<artifactId>server-pom</artifactId>
-	<version>0.1-SNAPSHOT</version>
+	<version>0.1</version>
 
 	<parent>
 		<groupId>de.li2b2.shrine</groupId>
 		<artifactId>shrine-pom</artifactId>
-		<version>0.1-SNAPSHOT</version>
+		<version>0.1</version>
 	</parent>
 
 	<modules>

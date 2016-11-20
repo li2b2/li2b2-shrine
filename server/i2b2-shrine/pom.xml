@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<name>Li2b2 SHRINE : Server : Standalone Broker (i2b2)</name>
 	<packaging>jar</packaging>
@@ -11,12 +10,12 @@
 
 	<groupId>de.li2b2.shrine</groupId>
 	<artifactId>i2b2-shrine</artifactId>
-	<version>0.1-SNAPSHOT</version>
+	<version>0.1</version>
 
 	<parent>
 		<groupId>de.li2b2.shrine</groupId>
 		<artifactId>server-pom</artifactId>
-		<version>0.1-SNAPSHOT</version>
+		<version>0.1</version>
 	</parent>
 	<build>
 		<plugins>
@@ -136,22 +135,22 @@
 		<dependency>
 			<groupId>org.aktin</groupId>
 			<artifactId>broker-server</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<version>0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>de.li2b2.shrine</groupId>
 			<artifactId>i2b2-broker</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<version>0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>de.li2b2.facade</groupId>
 			<artifactId>li2b2-server</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<version>0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.aktin</groupId>
 			<artifactId>broker-client</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<version>0.1</version>
 			<scope>test</scope>
 		</dependency>
 

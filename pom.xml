@@ -4,7 +4,7 @@
 	
 	<groupId>de.li2b2.shrine</groupId>
 	<artifactId>shrine-pom</artifactId>
-	<version>0.1-SNAPSHOT</version>
+	<version>0.1</version>
   
 	<name>Li2b2 SHRINE</name>
 	<description>Asynchronous Shared Health Research Informatics NEtwork (ASHRINE). Replace the i2b2 SHRINE infrastructure with advanced technology.</description>
@@ -32,7 +32,7 @@
 	<scm>
 		<connection>scm:git:git@github.com:li2b2/li2b2-shrine.git</connection>
 		<developerConnection>scm:git:git@github.com:li2b2/li2b2-shrine.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>v0.1</tag>
 		<url>https://github.com/li2b2/li2b2-shrine</url>
 	</scm>
 	<distributionManagement>
