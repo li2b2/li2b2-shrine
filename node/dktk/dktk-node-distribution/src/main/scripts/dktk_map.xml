@@ -93,7 +93,7 @@
 			<key>urn:dktk:dataelement:97:*</key>
 			<operator>ns7:Eq</operator>
 			<!-- TODO use DKTK query to indicate 'Normalgewebe' OR 'Tumorgewebe' -->
-			<value>Normalgewebe</value>
+			<value>Tumorgewebe</value>
 		</dktk>
 	</entry>
 </map>
