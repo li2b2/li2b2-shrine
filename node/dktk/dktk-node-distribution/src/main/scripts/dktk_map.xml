@@ -93,4 +93,15 @@
                 <value>Serum</value>
         </dktk>
 	</entry>
+	<entry>
+        <i2b2>
+                <key>specimen/tissue</key>
+        </i2b2>
+        <dktk>
+                <key>urn:dktk:dataelement:97:*</key>
+                <operator>ns7:Eq</operator>
+                <!-- TODO use DKTK query to indicate 'Normalgewebe' OR 'Tumorgewebe' -->
+                <value>Normalgewebe</value>
+        </dktk>
+	</entry>
 </map>
