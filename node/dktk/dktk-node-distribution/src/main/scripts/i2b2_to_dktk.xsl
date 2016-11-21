@@ -193,7 +193,8 @@
 			</ns7:Where>
 		</ns7:Query>
 		<ns7:ViewFields>
-			<ns2:MdrKey>urn:dktk:dataelement:1:3</ns2:MdrKey>
+			<!-- use LOCAL_ID which should be present for all patients -->
+			<ns2:MdrKey>urn:dktk:dataelement:91:*</ns2:MdrKey>
 		</ns7:ViewFields>
 	</ns7:View>
 </xsl:template>
