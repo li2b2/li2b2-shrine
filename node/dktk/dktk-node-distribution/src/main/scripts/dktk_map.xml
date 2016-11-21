@@ -19,7 +19,7 @@
                 <key>gender/female</key>
         </i2b2>
         <dktk>
-                <key>urn:dktk:dataelement:1:3</key>
+                <key>urn:dktk:dataelement:1:*</key>
                 <operator>ns7:Eq</operator>
                 <value>W</value>
         </dktk>
@@ -29,7 +29,7 @@
                 <key>gender/male</key>
         </i2b2>
         <dktk>
-                <key>urn:dktk:dataelement:1:3</key>
+                <key>urn:dktk:dataelement:1:*</key>
                 <operator>ns7:Eq</operator>
                 <value>M</value>
         </dktk>
@@ -39,7 +39,7 @@
                 <key>gender/indeterminate</key>
         </i2b2>
         <dktk>
-                <key>urn:dktk:dataelement:1:3</key>
+                <key>urn:dktk:dataelement:1:*</key>
                 <operator>ns7:Eq</operator>
                 <value>S</value>
         </dktk>
@@ -49,7 +49,7 @@
                 <key>gender</key>
         </i2b2>
         <dktk>
-                <key>urn:dktk:dataelement:1:3</key>
+                <key>urn:dktk:dataelement:1:*</key>
                 <operator>ns7:IsNotNull</operator>
         </dktk>
 	</entry>
@@ -58,7 +58,7 @@
                 <key>vitalstatus/living</key>
         </i2b2>
         <dktk>
-                <key>urn:dktk:dataelement:53:3</key>
+                <key>urn:dktk:dataelement:53:*</key>
                 <operator>ns7:Eq</operator>
                 <value>lebend</value>
         </dktk>
@@ -68,7 +68,7 @@
                 <key>vitalstatus/deceased</key>
         </i2b2>
         <dktk>
-                <key>urn:dktk:dataelement:53:3</key>
+                <key>urn:dktk:dataelement:53:*</key>
                 <operator>ns7:Eq</operator>
                 <value>verstorben</value>
         </dktk>
@@ -78,7 +78,7 @@
                 <key>specimen/plasma</key>
         </i2b2>
         <dktk>
-                <key>urn:dktk:dataelement:97:1</key>
+                <key>urn:dktk:dataelement:97:*</key>
                 <operator>ns7:Eq</operator>
                 <value>Plasma</value>
         </dktk>
@@ -88,7 +88,7 @@
                 <key>specimen/serum</key>
         </i2b2>
         <dktk>
-                <key>urn:dktk:dataelement:97:1</key>
+                <key>urn:dktk:dataelement:97:*</key>
                 <operator>ns7:Eq</operator>
                 <value>Serum</value>
         </dktk>
