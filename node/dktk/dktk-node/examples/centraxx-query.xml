@@ -1,0 +1,27 @@
+<ns7:View xmlns:ns10="http://schema.samply.de/ccp/Case" xmlns:ns11="http://schema.samply.de/ccp/Sample" xmlns:ns12="http://schema.samply.de/ccp/QueryResultStatistic" xmlns:ns13="http://schema.samply.de/ccp/Inquiry" xmlns:ns14="http://schema.samply.de/ccp/Error" xmlns:ns15="http://schema.samply.de/ccp/QueryResult" xmlns:ns16="http://schema.samply.de/ccp/RorMetareg" xmlns:ns17="http://schema.samply.de/ccp/Patient" xmlns:ns2="http://schema.samply.de/ccp/MdrKey" xmlns:ns3="http://schema.samply.de/ccp/Value" xmlns:ns4="http://schema.samply.de/ccp/Attribute" xmlns:ns5="http://schema.samply.de/ccp/MultivalueAttribute" xmlns:ns6="http://schema.samply.de/ccp/RangeAttribute" xmlns:ns7="http://schema.samply.de/ccp/Query" xmlns:ns8="http://schema.samply.de/ccp/Container" xmlns:ns9="http://schema.samply.de/ccp/Entity">
+<ns7:Query>
+    <ns7:Where>
+        <ns7:And>
+            <ns7:Or>
+                <ns7:Eq>
+                    <ns4:Attribute>
+                        <ns2:MdrKey>urn:dktk:dataelement:1:3</ns2:MdrKey>
+                        <ns3:Value>W</ns3:Value>
+                    </ns4:Attribute>
+                </ns7:Eq>
+            </ns7:Or>
+            <ns7:Or>
+                <ns7:Eq>
+                    <ns4:Attribute>
+                        <ns2:MdrKey>urn:dktk:dataelement:1:3</ns2:MdrKey>
+                        <ns3:Value>M</ns3:Value>
+                    </ns4:Attribute>
+                </ns7:Eq>
+            </ns7:Or>
+        </ns7:And>
+    </ns7:Where>
+</ns7:Query>
+<ns7:ViewFields>
+	<ns2:MdrKey>urn:dktk:dataelement:1:3</ns2:MdrKey>
+</ns7:ViewFields>
+</ns7:View>
