@@ -29,9 +29,8 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<addClasspath>true</addClasspath>
-							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>org.aktin.broker.i2b2.node.Application</mainClass>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							<mainClass>de.li2b2.shrine.node.dktk.CentraxxNode</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
