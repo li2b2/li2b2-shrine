@@ -43,7 +43,7 @@ public class MyBinder extends AbstractBinder{
 		bind(backend).to(BrokerBackend.class);
 		bind(new AuthCache(backend)).to(AuthCache.class);
 		try {
-			// TODO set aggregator data directory
+			// set aggregator data directory
 			AggregatorImpl adb = new AggregatorImpl(ds, Paths.get(config.getAggregatorDataPath()));
 			bind(adb).to(AggregatorBackend.class);
 		} catch (IOException e) {
