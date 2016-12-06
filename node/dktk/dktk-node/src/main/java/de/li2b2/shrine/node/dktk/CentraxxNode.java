@@ -70,6 +70,16 @@ public class CentraxxNode extends AbstractNode{
 		app.writePendingQueries();
 	}
 
+	// TODO override fillModuleVersion... to report the centraxx version
+	private String retrieveCentraxxVersion() throws IOException{
+		URL url = centraxx_teiler.resolve("../info").toURL();
+		HttpURLConnection c = (HttpURLConnection)url.openConnection();
+		// this REST API does only support JSON. XML will not work
+		c.setRequestProperty("Accept", "application/json");
+		try( InputStream in = c.getInputStream() ){
+			return CentraxxUtil.extractInfoVersion(in);
+		}
+	}
 	/**
 	 * Submit a query to the DKTK Centraxx and return the query URI
 	 * which can be used to retrieve the results
