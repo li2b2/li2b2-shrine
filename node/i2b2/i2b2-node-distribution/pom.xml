@@ -6,19 +6,19 @@
 
 	<groupId>de.li2b2.shrine.node</groupId>
 	<artifactId>i2b2-node-distribution</artifactId>
-	<version>0.2-SNAPSHOT</version>
+	<version>0.2</version>
 
 	<parent>
 		<groupId>de.li2b2.shrine.node</groupId>
 		<artifactId>i2b2-pom</artifactId>
-		<version>0.2-SNAPSHOT</version>
+		<version>0.2</version>
 	</parent>
 
 	<dependencies>
 		<dependency>
 			<groupId>de.li2b2.shrine.node</groupId>
 			<artifactId>shrine-i2b2-node</artifactId>
-			<version>0.2-SNAPSHOT</version>
+			<version>0.2</version>
 		</dependency>
 	</dependencies>
 
