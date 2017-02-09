@@ -34,6 +34,9 @@ import org.w3c.dom.NodeList;
 /**
  * Dummy node which immediately response to all query requests with a random patient count.
  * Centraxx URI should look like http://server/centraxx/rest/teiler/
+ *
+ * TODO: change URI to pure centraxx rest URI: http://server/centraxx/rest
+ *
  * @author R.W.Majeed
  *
  */
@@ -44,6 +47,7 @@ public class CentraxxNode extends AbstractNode{
 	private Map<String,String> pendingCentraxxQueries;
 	private String pendingFile;
 	private boolean verbose;
+	private String centraxxVersion;
 
 
 	public CentraxxNode(URI centraxx_teiler, String pendingProperties) throws ParserConfigurationException{
@@ -63,6 +67,10 @@ public class CentraxxNode extends AbstractNode{
 			System.out.println("Using transformation: "+args[3]);
 			app.loadTransformer(args[3]);
 		}
+		// set this property to disable retrieval of centraxx version information
+		if( System.getProperty("no_centraxx_info") == null ){
+			app.retrieveCentraxxVersion();
+		}
 		app.connectBroker(broker_service, HttpApiKeyAuth.newBearer(apiKey));
 		app.loadPendingQueries();
 		app.processRequests();
@@ -70,14 +78,25 @@ public class CentraxxNode extends AbstractNode{
 		app.writePendingQueries();
 	}
 
+	@Override
+	public String getModuleVersion() {
+		if( this.centraxxVersion != null ){
+			// report combined version
+			return String.valueOf(super.getModuleVersion()) + "/" + this.centraxxVersion;
+		}else{
+			// no centraxx version available, return only this software version
+			return super.getModuleVersion();
+		}
+	}
+
 	// TODO override fillModuleVersion... to report the centraxx version
-	private String retrieveCentraxxVersion() throws IOException{
+	private void retrieveCentraxxVersion() throws IOException{
 		URL url = centraxx_teiler.resolve("../info").toURL();
 		HttpURLConnection c = (HttpURLConnection)url.openConnection();
 		// this REST API does only support JSON. XML will not work
 		c.setRequestProperty("Accept", "application/json");
 		try( InputStream in = c.getInputStream() ){
-			return CentraxxUtil.extractInfoVersion(in);
+			this.centraxxVersion = CentraxxUtil.extractInfoVersion(in);
 		}
 	}
 	/**
