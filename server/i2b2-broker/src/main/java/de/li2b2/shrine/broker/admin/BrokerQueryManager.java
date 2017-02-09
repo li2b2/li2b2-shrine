@@ -46,6 +46,8 @@ public class BrokerQueryManager implements QueryManager {
 		query.setMetadata(meta);
 		// post result output list for i2b2 nodes
 		broker.putRequestDefinition(req, MEDIA_TYPE_I2B2_RESULT_OUTPUT_LIST, String.join("\n", result_types));
+		// publish query (XXX allow manual publishing through workplace folders later)
+		broker.publishRequest(req);
 		return query;
 	}
 
