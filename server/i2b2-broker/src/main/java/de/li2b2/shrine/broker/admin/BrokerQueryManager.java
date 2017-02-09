@@ -33,19 +33,19 @@ public class BrokerQueryManager implements QueryManager {
 	@Override
 	public Query runQuery(String userId, String groupId, Element queryDefinition, String[] result_types) throws IOException {
 		// TODO Auto-generated method stub
-		URI uri = broker.createRequest(MEDIA_TYPE_I2B2_QUERY_DEFINITION, queryDefinition);
-		String displayName = "Query "+broker.getQueryId(uri);
+		String req = broker.createRequest(MEDIA_TYPE_I2B2_QUERY_DEFINITION, queryDefinition);
+		String displayName = "Query "+req;
 		// add metadata
 		QueryMetadata meta = new QueryMetadata(displayName, userId, groupId, Instant.now());
 		meta.resultTypes = result_types;
 		// for debugging+logging use intermediate string
 		StringWriter tmp = new StringWriter();
 		JAXB.marshal(meta, tmp);
-		broker.putRequestDefinition(uri, QueryMetadata.MEDIA_TYPE, tmp.toString());
-		BrokerI2b2Query query = new BrokerI2b2Query(broker, broker.getRequestInfo(broker.getQueryId(uri)));
+		broker.putRequestDefinition(req, QueryMetadata.MEDIA_TYPE, tmp.toString());
+		BrokerI2b2Query query = new BrokerI2b2Query(broker, broker.getRequestInfo(req));
 		query.setMetadata(meta);
 		// post result output list for i2b2 nodes
-		broker.putRequestDefinition(uri, MEDIA_TYPE_I2B2_RESULT_OUTPUT_LIST, String.join("\n", result_types));
+		broker.putRequestDefinition(req, MEDIA_TYPE_I2B2_RESULT_OUTPUT_LIST, String.join("\n", result_types));
 		return query;
 	}
 
@@ -84,7 +84,7 @@ public class BrokerQueryManager implements QueryManager {
 	@Override
 	public void deleteQuery(String queryId) throws IOException{
 		// delete query globally
-		broker.delete(broker.resolveBrokerURI("request/"+queryId));
+		broker.deleteRequest(queryId);
 	}
 
 }

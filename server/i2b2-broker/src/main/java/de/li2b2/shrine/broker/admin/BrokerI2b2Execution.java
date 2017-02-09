@@ -35,7 +35,7 @@ public class BrokerI2b2Execution implements QueryExecution{
 			return QueryStatus.WAITTOPROCESS;
 		}
 		switch( status.getStatus() ){
-		case accepted:
+		case queued:
 		case processing:
 			ret = QueryStatus.PROCESSING;
 			break;
