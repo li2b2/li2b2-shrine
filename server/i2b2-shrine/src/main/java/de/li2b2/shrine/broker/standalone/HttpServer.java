@@ -96,8 +96,7 @@ public class HttpServer {
 		jetty.setHandler(context);
 
 		// initialise query manager
-		qm = new BrokerQueryManager(new URI("http://localhost:"+addr.getPort()+"/broker/"));
-		rc.register(new MyBinder(ds, qm, pm, config));
+		rc.register(new MyBinder(ds, pm, config));
 
 		ServletHolder jersey = new ServletHolder(new ServletContainer(rc));
 //		jersey.setInitOrder(0);

@@ -1,16 +1,19 @@
 package de.li2b2.shrine.broker.admin;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.io.UncheckedIOException;
+import java.sql.SQLException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.JAXB;
 
-import org.aktin.broker.client.BrokerAdmin;
+import org.aktin.broker.server.DateDataSource;
 import org.aktin.broker.xml.RequestInfo;
 import org.aktin.broker.xml.RequestStatus;
 import org.aktin.broker.xml.RequestStatusInfo;
@@ -24,11 +27,11 @@ import de.sekmi.li2b2.api.crc.QueryExecution;
 public class BrokerI2b2Query implements Query {
 
 	private QueryMetadata meta;
-	BrokerAdmin broker;
+	BrokerQueryManager qm;
 	private RequestInfo info;
 	
-	public BrokerI2b2Query(BrokerAdmin broker, RequestInfo info) {
-		this.broker = broker;
+	public BrokerI2b2Query(BrokerQueryManager qm, RequestInfo info) {
+		this.qm = qm;
 		this.info = info;
 	}
 	public void setMetadata(QueryMetadata meta){
@@ -47,14 +50,16 @@ public class BrokerI2b2Query implements Query {
 //		meta = JAXB.unmarshal(broker.getRequestDefinition(getId(), QueryMetadata.MEDIA_TYPE), QueryMetadata.class);
 		// load for debugging
 		String xml;
-		try( Reader r = broker.getRequestDefinition(getId(), QueryMetadata.MEDIA_TYPE) ){
+		try( Reader r = qm.broker.getRequestDefinition(getId(), QueryMetadata.MEDIA_TYPE) ){
 			xml = Util.readContent(r);
+		} catch (SQLException e) {
+			throw new IOException(e);
 		}
 		meta = JAXB.unmarshal(new StringReader(xml), QueryMetadata.class);
 	}
 
 	@Override
-	public String getId() {
+	public int getId() {
 		return info.getId();
 	}
 
@@ -78,10 +83,13 @@ public class BrokerI2b2Query implements Query {
 
 	@Override
 	public Element getDefinition() throws IOException{
-		Reader r = broker.getRequestDefinition(info.getId(), BrokerQueryManager.MEDIA_TYPE_I2B2_QUERY_DEFINITION);
-		// convert from reader to Element
-		Document dom = Util.parseDocument(r);
-		r.close();
+		Document dom;
+		try( Reader r = qm.broker.getRequestDefinition(info.getId(), BrokerQueryManager.MEDIA_TYPE_I2B2_QUERY_DEFINITION) ){
+			// convert from reader to Element
+			dom = Util.parseDocument(r);			
+		} catch (SQLException e) {
+			throw new IOException(e);
+		}
 		return dom.getDocumentElement();
 	}
 
@@ -97,20 +105,51 @@ public class BrokerI2b2Query implements Query {
 		lazyLoadMetadata();
 		meta.displayName = name;
 		// write to broker
-		broker.putRequestDefinition(info.getId(), QueryMetadata.MEDIA_TYPE, out -> JAXB.marshal(meta, out));
+		StringWriter w = new StringWriter();
+		JAXB.marshal(meta, w);
+		try {
+			qm.broker.setRequestDefinition(info.getId(), QueryMetadata.MEDIA_TYPE, new StringReader(w.toString()));
+		} catch (SQLException e) {
+			throw new IOException(e);
+		}
 	}
 
 	@Override
 	public List<? extends QueryExecution> getExecutions() throws IOException {
-		List<RequestStatusInfo> list = broker.listRequestStatus(info.getId());
+		List<RequestStatusInfo> list;
+		int knownNodes;
+		try {
+			list = qm.broker.listRequestNodeStatus(info.getId());
+			// TODO cache the node list size somewhere outside to reduce unneccessary load on the broker
+			knownNodes = qm.broker.getAllNodes().size();
+		} catch (SQLException e) {
+			throw new IOException(e);
+		}
 		List<QueryExecution> exec = new ArrayList<>(list.size());
-		// TODO cache the node list size somewhere outside to reduce unneccessary load on the broker
-		int knownNodes = broker.listNodes().size();
 		exec.add(new CurrentFeedbackExecution(this, knownNodes, list));
 		for( RequestStatusInfo status : list ){
 			exec.add(new BrokerI2b2Execution(this, status));
 		}
 		return exec;
+	}
+
+	protected Integer readPatientCountResult(int node) throws NumberFormatException, IOException{
+		DateDataSource result;
+		// TODO verify PatientCountResult.MEDIA_TYPE
+		try {
+			result = qm.aggregator.getResult(getId(), node);
+		} catch (SQLException e) {
+			throw new IOException(e);
+		}
+		if( result == null ){
+			// no result
+			return null;
+		}else{
+			try( InputStreamReader r = new InputStreamReader(result.getInputStream()) ){
+				return Integer.parseInt(Util.readContent(r));
+			}
+		}
+		
 	}
 	/**
 	 * Calculate the total number of patients over all returned results / nodes
@@ -121,22 +160,25 @@ public class BrokerI2b2Query implements Query {
 	public Integer calculateTotalPatientCount() throws IOException{
 		int total = 0;
 		int includedNodes = 0;
-		List<RequestStatusInfo> list = broker.listRequestStatus(info.getId());
-		for( RequestStatusInfo status : list ){
-			if( status.getStatus() != RequestStatus.completed ){
-				// we don't include unfinished requests in the total count.
-				// unfinished requests will not have any submitted data
-				continue;
+		try{
+			List<RequestStatusInfo> list = qm.broker.listRequestNodeStatus(getId());
+			for( RequestStatusInfo status : list ){
+				if( status.getStatus() != RequestStatus.completed ){
+					// we don't include unfinished requests in the total count.
+					// unfinished requests will not have any submitted data
+					continue;
+				}
+				// retrieve reported count
+				Integer count = readPatientCountResult(status.node);
+				// add if present
+				if( count != null ){
+					includedNodes ++;
+					total += count;
+				}
 			}
-			// retrieve reported count
-			String count = broker.getResultString(info.getId(), status.node, PatientCountResult.MEDIA_TYPE);
-			// add if present
-			if( count != null ){
-				includedNodes ++;
-				total += Integer.parseInt(count);
-			}
+		}catch( SQLException e ){
+			throw new IOException(e);
 		}
-
 		// don't return a number if no results were retrieved
 		if( includedNodes == 0 ){
 			return null;

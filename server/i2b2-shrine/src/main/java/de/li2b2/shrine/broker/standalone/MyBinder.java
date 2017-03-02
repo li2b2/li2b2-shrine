@@ -2,6 +2,7 @@ package de.li2b2.shrine.broker.standalone;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.net.URI;
 import java.nio.file.Paths;
 
 import javax.sql.DataSource;
@@ -14,6 +15,7 @@ import org.aktin.broker.db.BrokerBackend;
 import org.aktin.broker.db.BrokerImpl;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 
+import de.li2b2.shrine.broker.admin.BrokerQueryManager;
 import de.sekmi.li2b2.api.crc.QueryManager;
 import de.sekmi.li2b2.api.ont.Ontology;
 import de.sekmi.li2b2.api.pm.ProjectManager;
@@ -28,9 +30,10 @@ public class MyBinder extends AbstractBinder{
 	private ProjectManager pm;
 	private Ontology ont;
 	private Configuration config;
+	private BrokerBackend broker;
+	private AggregatorBackend aggregator;
 	
-	public MyBinder(DataSource ds, QueryManager qm, ProjectManager pm, Configuration config){
-		this.qm = qm;
+	public MyBinder(DataSource ds, ProjectManager pm, Configuration config){
 		this.ds = ds;
 		this.pm = pm;
 		this.config = config;
@@ -39,19 +42,18 @@ public class MyBinder extends AbstractBinder{
 	protected void configure() {
 		// singleton
 
-		BrokerBackend backend;
-		AggregatorBackend adb;
 		try {
-			backend = new BrokerImpl(ds, Paths.get(config.getBrokerDataPath()));
+			broker = new BrokerImpl(ds, Paths.get(config.getBrokerDataPath()));
 			// set aggregator data directory
-			adb = new AggregatorImpl(ds, Paths.get(config.getAggregatorDataPath()));
+			aggregator = new AggregatorImpl(ds, Paths.get(config.getAggregatorDataPath()));
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		bind(backend).to(BrokerBackend.class);
-		bind(adb).to(AggregatorBackend.class);
-		bind(new AuthCache(backend)).to(AuthCache.class);
+		bind(broker).to(BrokerBackend.class);
+		bind(aggregator).to(AggregatorBackend.class);
+		bind(new AuthCache(broker)).to(AuthCache.class);
 		bind(new RequestTypeManager()).to(RequestTypeManager.class);
+		qm = new BrokerQueryManager(broker, aggregator);
 
 		// bind li2b2 backend implementations
 		bind(qm).to(QueryManager.class);

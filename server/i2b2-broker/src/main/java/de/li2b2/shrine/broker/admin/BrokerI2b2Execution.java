@@ -1,6 +1,7 @@
 package de.li2b2.shrine.broker.admin;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 
@@ -60,8 +61,8 @@ public class BrokerI2b2Execution implements QueryExecution{
 		String label = null;
 		Node node;
 		try {
-			node = query.broker.getNode(status.node);
-		} catch (IOException e) {
+			node = query.qm.broker.getNode(status.node);
+		} catch (SQLException e) {
 			// TODO log warning
 			node = null;
 		}
@@ -76,12 +77,12 @@ public class BrokerI2b2Execution implements QueryExecution{
 
 	@Override
 	public List<? extends QueryResult> getResults() throws IOException {
-		String data = query.broker.getResultString(query.getId(), status.node, PatientCountResult.MEDIA_TYPE);
-		if( data == null ){
+		Integer count = query.readPatientCountResult(status.node);
+		if( count == null ){
 			// no result
 			return Collections.emptyList();
 		}else{
-			return Collections.singletonList(new PatientCountResult(Integer.parseInt(data), this));
+			return Collections.singletonList(new PatientCountResult(count, this));
 		}
 	}
 
