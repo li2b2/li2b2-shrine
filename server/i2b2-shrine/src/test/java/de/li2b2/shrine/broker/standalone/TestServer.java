@@ -27,6 +27,10 @@ public class TestServer implements Configuration{
 	public String getAggregatorDataPath() {
 		return "target/aggregator-data";
 	}
+	@Override
+	public String getBrokerDataPath() {
+		return "target/broker-data";
+	}
 
 	@Override
 	public int getPort() {
@@ -67,5 +71,6 @@ public class TestServer implements Configuration{
 			server.destroy();
 		}
 	}
+
 
 }

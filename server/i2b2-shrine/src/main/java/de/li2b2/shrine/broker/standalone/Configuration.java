@@ -9,5 +9,6 @@ public interface Configuration {
 	public InputStream readAPIKeyProperties()throws IOException;
 	public String getDatabasePath();
 	public String getAggregatorDataPath();
+	public String getBrokerDataPath();
 	public int getPort();
 }

@@ -39,16 +39,18 @@ public class MyBinder extends AbstractBinder{
 	protected void configure() {
 		// singleton
 
-		BrokerBackend backend = new BrokerImpl(ds);
-		bind(backend).to(BrokerBackend.class);
-		bind(new AuthCache(backend)).to(AuthCache.class);
+		BrokerBackend backend;
+		AggregatorBackend adb;
 		try {
+			backend = new BrokerImpl(ds, Paths.get(config.getBrokerDataPath()));
 			// set aggregator data directory
-			AggregatorImpl adb = new AggregatorImpl(ds, Paths.get(config.getAggregatorDataPath()));
-			bind(adb).to(AggregatorBackend.class);
+			adb = new AggregatorImpl(ds, Paths.get(config.getAggregatorDataPath()));
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+		bind(backend).to(BrokerBackend.class);
+		bind(adb).to(AggregatorBackend.class);
+		bind(new AuthCache(backend)).to(AuthCache.class);
 		bind(new RequestTypeManager()).to(RequestTypeManager.class);
 
 		// bind li2b2 backend implementations

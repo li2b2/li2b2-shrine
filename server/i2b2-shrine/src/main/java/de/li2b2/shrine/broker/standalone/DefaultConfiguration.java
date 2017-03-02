@@ -30,5 +30,9 @@ public class DefaultConfiguration implements Configuration{
 	public String getAggregatorDataPath() {
 		return "aggregator-data";
 	}
+	@Override
+	public String getBrokerDataPath() {
+		return "broker-data";
+	}
 
 }
