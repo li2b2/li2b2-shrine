@@ -24,6 +24,7 @@ import javax.xml.transform.TransformerException;
 
 import org.aktin.broker.client.auth.HttpApiKeyAuth;
 import org.aktin.broker.node.AbstractNode;
+import org.aktin.broker.node.SimpleTransformer;
 import org.aktin.broker.xml.RequestInfo;
 import org.aktin.broker.xml.RequestStatus;
 import org.aktin.broker.xml.util.Util;
@@ -44,16 +45,18 @@ public class CentraxxNode extends AbstractNode{
 	private static final String MEDIA_TYPE_I2B2_QUERY_DEFINITION = "text/vnd.i2b2.query-definition+xml";
 	private URI centraxx_teiler;
 	// maps pending broker ids to centrax query ids
-	private Map<String,String> pendingCentraxxQueries;
+	private Map<Integer,String> pendingCentraxxQueries;
 	private String pendingFile;
 	private boolean verbose;
 	private String centraxxVersion;
+	SimpleTransformer xslt;
 
 
 	public CentraxxNode(URI centraxx_teiler, String pendingProperties) throws ParserConfigurationException{
 		this.centraxx_teiler = centraxx_teiler;
 		this.pendingFile = pendingProperties;
 		this.verbose = true;
+		xslt = new SimpleTransformer();
 	}
 
 	public static void main(String[] args) throws Exception{
@@ -65,7 +68,7 @@ public class CentraxxNode extends AbstractNode{
 		// setup broker client
 		if( args.length == 4 ){
 			System.out.println("Using transformation: "+args[3]);
-			app.loadTransformer(args[3]);
+			app.xslt.loadTransformer(args[3]);
 		}
 		// set this property to disable retrieval of centraxx version information
 		if( System.getProperty("no_centraxx_info") == null ){
@@ -121,7 +124,7 @@ public class CentraxxNode extends AbstractNode{
 		// write query
 		try( OutputStream out = c.getOutputStream() ){
 			// write to output stream
-			Util.printDOM(query, out, "UTF-8");
+			Util.writeDOM(query, out, "UTF-8");
 		} catch (TransformerException e) {
 			throw new IOException("Error while generating XML",e);
 		}
@@ -200,7 +203,8 @@ public class CentraxxNode extends AbstractNode{
 		pendingCentraxxQueries = new HashMap<>();
 		// copy to our map
 		for( String key : props.stringPropertyNames() ){
-			pendingCentraxxQueries.put(key, props.getProperty(key));			
+			
+			pendingCentraxxQueries.put(Integer.parseInt(key), props.getProperty(key));			
 		}
 	}
 
@@ -222,15 +226,15 @@ public class CentraxxNode extends AbstractNode{
 			Document def = broker.getMyRequestDefinitionXml(request.getId(), MEDIA_TYPE_I2B2_QUERY_DEFINITION);
 			try{
 				// transform to DKTK centraxx query
-				if( hasTransformer() ){
+				if( xslt.hasTransformer() ){
 					if( verbose ){
 						System.out.println("Applying transformation to query #"+request.getId());
 					}
-					def = transform(def);
+					def = xslt.transform(def);
 				}
 				if( verbose ){
 					System.out.println("POSTing query #"+request.getId());
-					Util.printDOM(def, System.out, "UTF-8");
+					Util.writeDOM(def, System.out, "UTF-8");
 				}
 				String queryLocation = createCentraxxQuery(def);
 				pendingCentraxxQueries.put(request.getId(), queryLocation);
@@ -260,11 +264,11 @@ public class CentraxxNode extends AbstractNode{
 	}
 
 	public void retrieveResults() throws IOException{
-		Iterator<Entry<String, String>> pending = pendingCentraxxQueries.entrySet().iterator();
+		Iterator<Entry<Integer, String>> pending = pendingCentraxxQueries.entrySet().iterator();
 
 		while( pending.hasNext() ){
-			Entry<String,String> entry = pending.next();
-			String requestId = entry.getKey();
+			Entry<Integer,String> entry = pending.next();
+			Integer requestId = entry.getKey();
 			try{
 				int patientCount;
 				Document doc = retrieveCentraxxQueryStatus(entry.getValue());

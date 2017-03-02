@@ -7,11 +7,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.aktin.broker.client.auth.HttpApiKeyAuth;
 import org.aktin.broker.node.AbstractNode;
+import org.aktin.broker.node.SimpleTransformer;
 import org.aktin.broker.xml.RequestInfo;
 import org.aktin.broker.xml.RequestStatus;
 import org.aktin.broker.xml.util.Util;
@@ -33,8 +33,10 @@ public class I2b2Node extends AbstractNode{
 
 	Li2b2Client i2b2;
 	private List<RequestInfo> requests;
-	
-	public I2b2Node() throws ParserConfigurationException{
+	private SimpleTransformer transformer;
+
+	public I2b2Node(){
+		transformer = new SimpleTransformer();
 	}
 
 	/**
@@ -182,12 +184,12 @@ public class I2b2Node extends AbstractNode{
 			try {
 				broker.postRequestStatus(request.getId(), RequestStatus.processing);
 				// transform query
-				if( hasTransformer() ){
+				if( transformer.hasTransformer() ){
 					System.out.println("Applying transformation..");
-					def = transform(def);
+					def = transformer.transform(def);
 				}
 				System.out.println("Running query #"+request.getId());
-				Util.printDOM(def, System.out, "UTF-8");
+				Util.writeDOM(def, System.out, "UTF-8");
 				MasterInstanceResult mir;
 				mir = i2b2.CRC().runQueryInstance(def.getDocumentElement(), resultList);
 				// retrieve results for primary instance as listed
@@ -271,7 +273,7 @@ public class I2b2Node extends AbstractNode{
 		// setup broker client
 		I2b2Node app = new I2b2Node();
 		if( args.length == 6 ){
-			app.loadTransformer(args[5]);
+			app.transformer.loadTransformer(args[5]);
 		}
 		
 		app.connectBroker(broker_service, HttpApiKeyAuth.newBearer(broker_key));

@@ -3,6 +3,7 @@ package de.li2b2.shrine.node.i2b2;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -16,7 +17,6 @@ import org.aktin.broker.client.auth.ClientAuthenticator;
 import org.aktin.broker.client.auth.HttpApiKeyAuth;
 import org.aktin.broker.xml.RequestInfo;
 import org.aktin.broker.xml.RequestStatus;
-import org.aktin.broker.xml.SoftwareModule;
 import org.w3c.dom.Document;
 
 
@@ -61,7 +61,7 @@ public class RandomCountNode {
 		broker.setClientAuthenticator(auth);
 		// optional status exchange
 		broker.getBrokerStatus();
-		broker.postMyStatus(startup, new SoftwareModule("org.aktin.broker.i2b2.node", "1.0-SNAPSHOT"));
+		broker.postSoftwareVersions(Collections.singletonMap("org.aktin.broker.i2b2.node", "1.0-SNAPSHOT"));
 	}
 	public void processRequests() throws IOException{
 		List<RequestInfo> requests = broker.listMyRequests();

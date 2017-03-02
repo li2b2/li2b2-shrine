@@ -19,7 +19,7 @@ public class TestNode {
 		// setup broker client
 		if( args.length == 4 ){
 			System.out.println("Using transformation: "+args[3]);
-			app.loadTransformer(args[3]);
+			app.xslt.loadTransformer(args[3]);
 		}
 		app.connectBroker(broker_service, HttpApiKeyAuth.newBearer(apiKey));
 		app.loadPendingQueries();
