@@ -4,7 +4,7 @@
 
 	<groupId>de.li2b2.shrine.node</groupId>
 	<artifactId>query-translation</artifactId>
-	<version>0.3-SNAPSHOT</version>
+	<version>0.3</version>
 
 	<description>
 		Translate i2b2 queries and map
@@ -15,7 +15,7 @@
 	<parent>
 		<groupId>de.li2b2.shrine.node</groupId>
 		<artifactId>node-pom</artifactId>
-		<version>0.3-SNAPSHOT</version>
+		<version>0.3</version>
 	</parent>
 	
   
