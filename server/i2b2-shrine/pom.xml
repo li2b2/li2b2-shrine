@@ -135,12 +135,12 @@
 		<dependency>
 			<groupId>org.aktin</groupId>
 			<artifactId>broker-server</artifactId>
-			<version>0.3-SNAPSHOT</version>
+			<version>0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.aktin</groupId>
 			<artifactId>broker-client</artifactId>
-			<version>0.3-SNAPSHOT</version>
+			<version>0.3</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -151,7 +151,7 @@
 		<dependency>
 			<groupId>de.li2b2.facade</groupId>
 			<artifactId>li2b2-server</artifactId>
-			<version>0.2</version>
+			<version>0.3</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.hsqldb/hsqldb -->
