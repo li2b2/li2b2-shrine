@@ -7,12 +7,12 @@
 	
 	<groupId>de.li2b2.shrine.node</groupId>
 	<artifactId>dktk-pom</artifactId>
-	<version>0.3-SNAPSHOT</version>
+	<version>0.3</version>
 
 	<parent>
 		<groupId>de.li2b2.shrine.node</groupId>
 		<artifactId>node-pom</artifactId>
-		<version>0.3-SNAPSHOT</version>
+		<version>0.3</version>
 	</parent>
 
 	<modules>
