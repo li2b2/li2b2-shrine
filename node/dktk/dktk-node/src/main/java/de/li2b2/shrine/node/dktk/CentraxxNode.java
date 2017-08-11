@@ -224,6 +224,7 @@ public class CentraxxNode extends AbstractNode{
 			}
 			// retrieve definition
 			Document def = broker.getMyRequestDefinitionXml(request.getId(), MEDIA_TYPE_I2B2_QUERY_DEFINITION);
+			broker.postRequestStatus(request.getId(), RequestStatus.retrieved);
 			try{
 				// transform to DKTK centraxx query
 				if( xslt.hasTransformer() ){

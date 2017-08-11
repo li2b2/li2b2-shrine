@@ -180,6 +180,7 @@ public class I2b2Node extends AbstractNode{
 			Document def = broker.getMyRequestDefinitionXml(request.getId(), MEDIA_TYPE_I2B2_QUERY_DEFINITION);
 			// retrieve result output list
 			String[] resultList = broker.getMyRequestDefinitionLines(request.getId(), MEDIA_TYPE_I2B2_RESULT_OUTPUT_LIST);
+			broker.postRequestStatus(request.getId(), RequestStatus.retrieved);
 			// run query definition
 			try {
 				broker.postRequestStatus(request.getId(), RequestStatus.processing);
