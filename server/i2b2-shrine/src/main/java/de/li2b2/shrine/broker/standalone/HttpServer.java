@@ -18,7 +18,6 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
 
-import de.li2b2.shrine.broker.admin.BrokerQueryManager;
 import de.li2b2.shrine.broker.standalone.db.HSQLDataSource;
 import de.sekmi.li2b2.api.pm.ProjectManager;
 import de.sekmi.li2b2.api.pm.User;
@@ -36,7 +35,6 @@ public class HttpServer {
 	private ResourceConfig rc;
 	private Server jetty;
 	private DataSource ds;
-	private BrokerQueryManager qm;
 	private ProjectManager pm;
 	
 	public HttpServer(Configuration config) throws SQLException, IOException{
@@ -108,6 +106,10 @@ public class HttpServer {
 		jetty.join();
 	}
 	public void destroy() throws Exception{
+		if( jetty == null ) {
+			// jetty not started, no need to destry
+			return;
+		}
 		jetty.destroy();
 	}
 	public void stop() throws Exception{
