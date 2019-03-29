@@ -2,7 +2,6 @@ package de.li2b2.shrine.broker.standalone;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.net.URI;
 import java.nio.file.Paths;
 
 import javax.sql.DataSource;
