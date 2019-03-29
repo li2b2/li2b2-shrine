@@ -6,19 +6,19 @@
 
 	<groupId>de.li2b2.shrine</groupId>
 	<artifactId>i2b2-shrine-distributable</artifactId>
-	<version>0.4-SNAPSHOT</version>
+	<version>0.4</version>
 
 	<parent>
 		<groupId>de.li2b2.shrine</groupId>
 		<artifactId>server-pom</artifactId>
-		<version>0.4-SNAPSHOT</version>
+		<version>0.4</version>
 	</parent>
 
 	<dependencies>
 		<dependency>
 			<groupId>de.li2b2.shrine</groupId>
 			<artifactId>i2b2-shrine</artifactId>
-			<version>0.4-SNAPSHOT</version>
+			<version>0.4</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.enterprise</groupId>
