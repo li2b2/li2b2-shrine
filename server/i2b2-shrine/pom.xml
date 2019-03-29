@@ -81,7 +81,7 @@
 										<artifactItem>
 											<groupId>org.i2b2</groupId>
 											<artifactId>webclient</artifactId>
-											<version>1.7.08</version>
+											<version>1.7.11</version>
 											<type>zip</type>
 										</artifactItem>
 									</artifactItems>
@@ -151,7 +151,7 @@
 		<dependency>
 			<groupId>de.li2b2.facade</groupId>
 			<artifactId>li2b2-server</artifactId>
-			<version>0.3</version>
+			<version>0.6-SNAPSHOT</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.hsqldb/hsqldb -->
@@ -162,17 +162,21 @@
 		</dependency>
 
 
-
 		<!-- test dependencies to run a server for testing -->
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-server</artifactId>
-			<version>9.2.14.v20151106</version>
+			<artifactId>jetty-servlet</artifactId>
+			<version>9.4.15.v20190215</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-servlet</artifactId>
-			<version>9.2.14.v20151106</version>
+			<artifactId>jetty-util</artifactId>
+			<version>9.4.15.v20190215</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-server</artifactId>
+			<version>9.4.15.v20190215</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.core</groupId>
