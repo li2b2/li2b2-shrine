@@ -18,8 +18,8 @@ For urlProxy and urlCellPM you need to determine the absolute url with host. E.g
 
 
 2. Download and unzip the latest i2b2-shrine-distributable...zip from https://github.com/li2b2/li2b2-shrine/releases
-To run the shrine server, you can double-click on run_shrine.bat.
-The li2b2-SHRINE webclient can then be accessed via http://localhost:8080/webclient/
+To run the shrine server, you can double-click on run_shrine.bat.  
+The li2b2-SHRINE webclient can then be accessed via http://localhost:8080/webclient/  
 If needed, the port number can be changed in run_shrine.bat
 
 Any queries executed on the SHRINE webclient, will be stored and need to be fetched and executed by other data warehouses.
