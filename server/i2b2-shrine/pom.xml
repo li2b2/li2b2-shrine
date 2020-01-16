@@ -81,7 +81,7 @@
 										<artifactItem>
 											<groupId>org.i2b2</groupId>
 											<artifactId>webclient</artifactId>
-											<version>1.7.11</version>
+											<version>1.7.12.0001</version>
 											<type>zip</type>
 										</artifactItem>
 									</artifactItems>
@@ -151,14 +151,14 @@
 		<dependency>
 			<groupId>de.li2b2.facade</groupId>
 			<artifactId>li2b2-server</artifactId>
-			<version>0.6</version>
+			<version>0.7-SNAPSHOT</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.hsqldb/hsqldb -->
 		<dependency>
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
-			<version>2.3.4</version>
+			<version>2.5.0</version>
 		</dependency>
 
 
@@ -166,47 +166,43 @@
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-servlet</artifactId>
-			<version>9.4.15.v20190215</version>
+			<version>9.4.25.v20191220</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-util</artifactId>
-			<version>9.4.15.v20190215</version>
+			<version>9.4.25.v20191220</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-server</artifactId>
-			<version>9.4.15.v20190215</version>
+			<version>9.4.25.v20191220</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.core</groupId>
 			<artifactId>jersey-server</artifactId>
-			<version>2.23.1</version>
+			<version>2.30</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-servlet-core</artifactId>
-			<version>2.23.1</version>
+			<version>2.30</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-jetty-http</artifactId>
-			<version>2.23.1</version>
+			<version>2.30</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.ext.cdi</groupId>
 			<artifactId>jersey-cdi1x-servlet</artifactId>
-			<version>2.23.1</version>
+			<version>2.30</version>
 		</dependency>
+
 		<dependency>
-			<groupId>org.glassfish.hk2</groupId>
-			<artifactId>hk2-locator</artifactId>
-			<version>2.4.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish.hk2</groupId>
-			<artifactId>hk2-core</artifactId>
-			<version>2.4.0</version>
+			<groupId>org.glassfish.jersey.inject</groupId>
+			<artifactId>jersey-hk2</artifactId>
+			<version>2.30</version>
 		</dependency>
 
 
