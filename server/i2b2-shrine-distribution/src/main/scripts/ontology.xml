@@ -22,4 +22,12 @@
 			<concept key="specimen/tissue"><name>Tissue</name></concept>
 		</narrower>
 	</concept>
+	<concept key="icd10">
+		<name>ICD10</name>
+		<narrower>
+			<concept key="icd10/chI"><name>Certain infectious and parasitic diseases</name></concept>
+			<concept key="icd10/chX"><name>Diseases of the respiratory system</name></concept>
+			<concept key="icd10/chXI"><name>Diseases of the digestive system</name></concept>
+		</narrower>
+	</concept>
 </ontology>
