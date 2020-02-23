@@ -215,7 +215,10 @@ public class I2b2Node extends AbstractNode{
 	}
 
 	private static void printUsage(){
-		System.out.println("Usage: 'de...I2b2Node' broker_endpoint_url broker_api_key i2b2_pm_service_url['|'i2b2_proxy_url] i2b2_user'@'domain['/'project] i2b2_password [query_xslt_file]");
+		System.out.println("Usage: 'de...I2b2Node' broker_endpoint_url broker_api_key"
+				+ " i2b2_pm_service_url['|'i2b2_proxy_url]"
+				+ " i2b2_user'@'domain['/'project] i2b2_password"
+				+ " [query_xslt_file]");
 		System.out.println();
 		System.out.println(" *i2b2_proxy_url* is not a normal HTTP proxy,");
 		System.out.println("  but an i2b2-specific servicee. If is specified");
