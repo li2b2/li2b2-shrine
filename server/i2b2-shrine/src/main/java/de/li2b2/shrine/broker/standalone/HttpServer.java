@@ -5,9 +5,15 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.sql.DataSource;
+import javax.xml.bind.JAXB;
 
 import org.aktin.broker.AggregatorEndpoint;
 import org.aktin.broker.BrokerEndpoint;
@@ -27,7 +33,8 @@ import de.sekmi.li2b2.services.QueryToolService;
 import de.sekmi.li2b2.services.Webadmin;
 import de.sekmi.li2b2.services.Webclient;
 import de.sekmi.li2b2.services.WorkplaceService;
-import de.sekmi.li2b2.services.impl.ProjectManagerImpl;
+import de.sekmi.li2b2.services.impl.pm.ProjectManagerImpl;
+import de.sekmi.li2b2.util.CORSFilter;
 import liquibase.exception.LiquibaseException;
 
 public class HttpServer {
@@ -36,7 +43,7 @@ public class HttpServer {
 	private Server jetty;
 	private DataSource ds;
 	private ProjectManager pm;
-	
+
 	public HttpServer(Configuration config) throws SQLException, IOException{
 		this.config = config;
 		ds = new HSQLDataSource(config.getDatabasePath());
@@ -58,6 +65,11 @@ public class HttpServer {
 		register(Webclient.class);
 		register(Webadmin.class);
 
+		// add CORS filter
+		Map<String, String> props = new HashMap<String, String>();
+		props.put("jersey.config.server.provider.classnames", CORSFilter.class.getName());
+		rc.setProperties(props);
+
 		loadLi2b2Backend();
 	}
 
@@ -69,12 +81,29 @@ public class HttpServer {
 		}
 	}
 	private void loadLi2b2Backend() throws IOException{
-		pm = new ProjectManagerImpl();
-		User user = pm.addUser("demo");//, "i2b2demo");
-		user.setPassword("demouser".toCharArray());
-		pm.addProject("Demo", "li2b2 Demo").addUserRoles(user, "USER","EDITOR","DATA_OBFSC","DATA_AGG");
+		// try to find project manager configuration
+		Path path = Paths.get(config.getProjectManagerPath());
+		if( Files.exists(path) ) {
+			// load project manager
+			pm = JAXB.unmarshal(path.toFile(), ProjectManagerImpl.class);
+		}else {
+			// use default/demo configuration
+			pm = new ProjectManagerImpl();
+			pm.setProperty(PMService.SERVER_DOMAIN_ID, "i2b2");
+			pm.setProperty(PMService.SERVER_DOMAIN_NAME, "i2b2demo");
+			pm.setProperty(PMService.SERVER_ENVIRONMENT, "DEVELOPMENT");
+			User user = pm.addUser("demo");
+			user.setPassword("demouser".toCharArray());
+			pm.addProject("Demo", "li2b2 Demo").getProjectUser(user).addRoles("USER","EDITOR","DATA_OBFSC","DATA_AGG");
+		}
+		pm.setFlushDestination(path);
 		//pm.addProject("Demo2", "li2b2 Demo2").addUserRoles(user, "USER");		
-		
+	}
+
+	private void closeLi2b2Backend() throws IOException{
+		// write user information (e.g. changed passwords)
+		Path path = Paths.get(config.getProjectManagerPath());
+		JAXB.marshal(pm, path.toFile());		
 	}
 	public final void register(Class<?> componentClass){
 		rc.register(componentClass);
@@ -106,6 +135,7 @@ public class HttpServer {
 		jetty.join();
 	}
 	public void destroy() throws Exception{
+		closeLi2b2Backend();
 		if( jetty == null ) {
 			// jetty not started, no need to destry
 			return;

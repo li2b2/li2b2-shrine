@@ -36,6 +36,10 @@ public class TestServer implements Configuration{
 	public int getPort() {
 		return 8080;
 	}
+	@Override
+	public String getProjectManagerPath() {
+		return "target/pm.xml";
+	}
 
 	/**
 	 * Run the test server with with the official i2b2
@@ -47,7 +51,7 @@ public class TestServer implements Configuration{
 		// use port if specified
 		int port;
 		if( args.length == 0 ){
-			port = 8080;
+			port = 8085;
 		}else if( args.length == 1 ){
 			port = Integer.parseInt(args[0]);
 		}else{
@@ -64,13 +68,14 @@ public class TestServer implements Configuration{
 		// start server
 		HttpServer server = new HttpServer(new TestServer());
 		try{
-			server.start(new InetSocketAddress(port));
+			server.start(new InetSocketAddress("localhost",port));
 			System.err.println("Broker service at: "+server.getBrokerServiceURI());
 			server.join();
 		}finally{
 			server.destroy();
 		}
 	}
+
 
 
 }

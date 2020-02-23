@@ -35,4 +35,9 @@ public class DefaultConfiguration implements Configuration{
 		return "broker-data";
 	}
 
+	@Override
+	public String getProjectManagerPath() {
+		return "pm.xml";
+	}
+
 }
