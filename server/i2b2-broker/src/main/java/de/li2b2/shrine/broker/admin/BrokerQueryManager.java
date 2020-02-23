@@ -98,7 +98,7 @@ public class BrokerQueryManager implements QueryManager {
 
 	@Override
 	public Iterable<? extends ResultType> getResultTypes() {
-		return Arrays.asList(ResultType.PATIENT_COUNT_XML);
+		return Arrays.asList(ResultType.PATIENT_COUNT_XML, ResultType.PATIENT_GENDER_COUNT_XML, ResultType.PATIENT_AGE_COUNT_XML, ResultType.PATIENT_VITALSTATUS_COUNT_XML);
 	}
 
 	@Override
