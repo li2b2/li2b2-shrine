@@ -16,7 +16,10 @@ import org.aktin.broker.xml.RequestInfo;
 import org.aktin.broker.xml.RequestStatus;
 import org.aktin.broker.xml.util.Util;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
+import de.sekmi.li2b2.client.FormattedMessageLogger;
 import de.sekmi.li2b2.client.Li2b2Client;
 import de.sekmi.li2b2.client.crc.MasterInstanceResult;
 import de.sekmi.li2b2.client.crc.QueryResultInstance;
@@ -113,6 +116,51 @@ public class I2b2Node extends AbstractNode{
 		System.out.println("Patient count for request #"+request.getId()+" is "+count);
 		broker.putRequestResult(request.getId(), "text/vnd.aktin.patient-count", Objects.toString(count));
 	}
+	private Element extractResultElementFromDocumentString(String resultDocument) throws IOException {
+		Document b1 = i2b2.parseXML(resultDocument);
+		NodeList nl = b1.getElementsByTagNameNS("http://www.i2b2.org/xsd/hive/msg/result/1.1/", "result");
+		if( nl.getLength() == 1 ) {
+			return (Element)nl.item(0);
+		}else {
+			return null;
+		}
+	}
+	private void postAllBreakdownResults(RequestInfo request, MasterInstanceResult mir) throws IOException{
+		Integer count = null;
+		Document resultBundle = i2b2.parseXML("<i2b2-result-bundle/>");
+		Element root = (Element)resultBundle.getDocumentElement();
+		
+		for( QueryResultInstance qr : mir.query_result_instance ){
+			if( qr.query_result_type.display_type.equals(QueryResultType.I2B2_DISPLAY_CATNUM) ) {
+				// breakdown result
+				// see if we can determine patient count
+				if( count == null && qr.set_size != null ) {
+					//  use set_size
+					count = qr.set_size;					
+				}
+				try {
+					String breakdown = i2b2.CRC().getResultDocument(qr.result_instance_id);
+					Element result = extractResultElementFromDocumentString(breakdown);
+					root.appendChild(root.getOwnerDocument().importNode(result, true));			
+					System.out.println("Adding result "+request.getId()+"."+qr.query_result_type.name);
+				} catch (HiveException | IOException e) {
+					Element el = root.getOwnerDocument().createElement("error");
+					root.appendChild(el);
+					el.setAttribute("name", qr.query_result_type.name);
+					el.setTextContent(e.getMessage());
+					System.err.println("Error adding result "+request.getId()+"."+qr.query_result_type.name+": "+e.getMessage());
+				}
+			}
+		}		
+		// submit results to aggregator
+		System.out.println("Patient count for request #"+request.getId()+" is "+count);
+
+		try {
+			broker.putRequestResult(request.getId(), "text/vnd.i2b2.result-bundle", FormattedMessageLogger.formatXML(resultBundle));
+		} catch (TransformerException e) {
+			throw new IOException(e);
+		}
+	}
 
 	// TODO for second version, concatenate the results (each starting with <?xml)
 	// TODO for third version, add multiple result documents
@@ -194,8 +242,8 @@ public class I2b2Node extends AbstractNode{
 				MasterInstanceResult mir;
 				mir = i2b2.CRC().runQueryInstance(def.getDocumentElement(), resultList);
 				// retrieve results for primary instance as listed
-				// this first version only reports the patient count as extracted from set_size
-				postOnlyPatientCount(request, mir);
+				// post all CATNUM/breakdown results
+				postAllBreakdownResults(request, mir);
 				// 
 				// report completed
 				broker.postRequestStatus(request.getId(), RequestStatus.completed);
@@ -207,6 +255,9 @@ public class I2b2Node extends AbstractNode{
 			} catch (TransformerException e) {
 				printError("Query transformation failed for request #"+request.getId(), e);
 				broker.postRequestFailed(request.getId(), "Query transformation failed", e);
+			} catch (IOException e) {
+				printError("Query processing failed for request #"+request.getId(), e);
+				broker.postRequestFailed(request.getId(), "IO error during query processing", e);				
 			}
 			// delete request
 			broker.deleteMyRequest(request.getId());
