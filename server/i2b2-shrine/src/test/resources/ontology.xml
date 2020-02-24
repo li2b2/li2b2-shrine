@@ -2,9 +2,9 @@
 	<concept key="gender">
 		<name>Gender</name>
 		<narrower>
-			<concept key="gender/female"><name>Female</name></concept>
-			<concept key="gender/male"><name>Male</name></concept>
-			<concept key="gender/indeterminate"><name>Indeterminate</name></concept>
+			<concept key="\\i2b2_DEMO\i2b2\Demographics\Gender\Female\"><name>Female</name></concept>
+			<concept key="\\i2b2_DEMO\i2b2\Demographics\Gender\Male\"><name>Male</name></concept>
+			<concept key="\\i2b2_DEMO\i2b2\Demographics\Gender\Unknown\"><name>Indeterminate</name></concept>
 		</narrower>
 	</concept>
 	<concept key="vitalstatus">
