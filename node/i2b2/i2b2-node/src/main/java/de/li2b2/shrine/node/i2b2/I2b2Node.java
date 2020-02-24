@@ -62,7 +62,7 @@ public class I2b2Node extends AbstractNode{
 			System.out.println("Using proxy "+proxy);
 			client.setProxy(new URL(proxy));
 		}
-		client.setAuthorisation(user, password, domain);
+		client.setCredentials(domain, user, password);
 		client.setPM(new URL(pm_service));
 		UserConfiguration uc = client.PM().requestUserConfiguration();
 		// find project
@@ -102,20 +102,20 @@ public class I2b2Node extends AbstractNode{
 		e.printStackTrace();
 		System.err.println("Error: "+message);		
 	}
-	private void postOnlyPatientCount(RequestInfo request, MasterInstanceResult mir) throws IOException{
-		Integer count = null;
-		for( QueryResultInstance qr : mir.query_result_instance ){
-			if( qr.query_result_type.display_type.equals(QueryResultType.I2B2_DISPLAY_CATNUM) 
-					&& qr.set_size != null){
-				//  use set_size
-				count = qr.set_size;
-				break;
-			}
-		}		
-		// submit results to aggregator
-		System.out.println("Patient count for request #"+request.getId()+" is "+count);
-		broker.putRequestResult(request.getId(), "text/vnd.aktin.patient-count", Objects.toString(count));
-	}
+//	private void postOnlyPatientCount(RequestInfo request, MasterInstanceResult mir) throws IOException{
+//		Integer count = null;
+//		for( QueryResultInstance qr : mir.query_result_instance ){
+//			if( qr.query_result_type.display_type.equals(QueryResultType.I2B2_DISPLAY_CATNUM) 
+//					&& qr.set_size != null){
+//				//  use set_size
+//				count = qr.set_size;
+//				break;
+//			}
+//		}		
+//		// submit results to aggregator
+//		System.out.println("Patient count for request #"+request.getId()+" is "+count);
+//		broker.putRequestResult(request.getId(), "text/vnd.aktin.patient-count", Objects.toString(count));
+//	}
 	private Element extractResultElementFromDocumentString(String resultDocument) throws IOException {
 		Document b1 = i2b2.parseXML(resultDocument);
 		NodeList nl = b1.getElementsByTagNameNS("http://www.i2b2.org/xsd/hive/msg/result/1.1/", "result");
@@ -136,11 +136,14 @@ public class I2b2Node extends AbstractNode{
 				// see if we can determine patient count
 				if( count == null && qr.set_size != null ) {
 					//  use set_size
-					count = qr.set_size;					
+					count = qr.set_size;
 				}
 				try {
 					String breakdown = i2b2.CRC().getResultDocument(qr.result_instance_id);
 					Element result = extractResultElementFromDocumentString(breakdown);
+					if( qr.set_size != null ) {
+						result.setAttribute("set-size", qr.set_size.toString());
+					}
 					root.appendChild(root.getOwnerDocument().importNode(result, true));			
 					System.out.println("Adding result "+request.getId()+"."+qr.query_result_type.name);
 				} catch (HiveException | IOException e) {

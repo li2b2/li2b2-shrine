@@ -2,11 +2,14 @@ package de.li2b2.shrine.broker.admin;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.aktin.broker.xml.Node;
 import org.aktin.broker.xml.RequestStatusInfo;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import de.sekmi.li2b2.api.crc.Query;
 import de.sekmi.li2b2.api.crc.QueryExecution;
@@ -77,13 +80,20 @@ public class BrokerI2b2Execution implements QueryExecution{
 
 	@Override
 	public List<? extends QueryResult> getResults() throws IOException {
-		Integer count = query.readPatientCountResult(status.node);
-		if( count == null ){
-			// no result
+
+		NodeList results = query.readResultBundleEntries(status.node);
+		if( results == null ) {
+			// no result yet
+//			QueryMetadata meta = query.getMetadata();
+			// XXX try to respond with incomplete results (name) from meta
 			return Collections.emptyList();
-		}else{
-			return Collections.singletonList(new PatientCountResult(count, this));
 		}
+
+		List<BreakdownResult> list = new ArrayList<>();
+		for( int i=0; i<results.getLength(); i++ ) {
+			list.add(BreakdownResult.parseElement((Element)results.item(i)));
+		}
+		return list;
 	}
 
 }

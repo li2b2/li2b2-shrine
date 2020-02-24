@@ -6,6 +6,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import org.aktin.broker.xml.RequestStatusInfo;
 import org.aktin.broker.xml.util.Util;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import de.sekmi.li2b2.api.crc.Query;
 import de.sekmi.li2b2.api.crc.QueryExecution;
@@ -36,6 +38,10 @@ public class BrokerI2b2Query implements Query {
 	}
 	public void setMetadata(QueryMetadata meta){
 		this.meta = meta;
+	}
+	public QueryMetadata getMetadata() {
+		lazyLoadMetadata();
+		return this.meta;
 	}
 	private void lazyLoadMetadata(){
 		if( this.meta == null ){
@@ -133,9 +139,8 @@ public class BrokerI2b2Query implements Query {
 		return exec;
 	}
 
-	protected Integer readPatientCountResult(int node) throws NumberFormatException, IOException{
+	protected Document readResultBundleDocument(int node) throws IOException {
 		DateDataSource result;
-		// TODO verify PatientCountResult.MEDIA_TYPE
 		try {
 			result = qm.aggregator.getResult(getId(), node);
 		} catch (SQLException e) {
@@ -144,12 +149,35 @@ public class BrokerI2b2Query implements Query {
 		if( result == null ){
 			// no result
 			return null;
-		}else{
-			try( InputStreamReader r = new InputStreamReader(result.getInputStream()) ){
-				return Integer.parseInt(Util.readContent(r));
+		}
+		// verify MEDIA_TYPE
+		// use startsWith, as content type may also contain ;charset=xxx
+		if( !result.getContentType().startsWith("text/vnd.i2b2.result-bundle") ) {
+			throw new IOException("Unexpected content type for result: "+result.getContentType());
+		}
+	
+		try( InputStreamReader r = new InputStreamReader(result.getInputStream(), StandardCharsets.UTF_8) ){
+			return Util.parseDocument(r);
+		}
+	}
+	protected NodeList readResultBundleEntries(int node) throws IOException {
+		Document dom = readResultBundleDocument(node);
+		if( dom == null ) {
+			return null;
+		}
+		return dom.getElementsByTagNameNS("http://www.i2b2.org/xsd/hive/msg/result/1.1/", "result");
+	}
+	private Integer readPatientCountResult(int node) throws NumberFormatException, IOException{
+		Integer count = null;
+		NodeList nl = readResultBundleEntries(node);
+		for( int i=0; i<nl.getLength(); i++ ) {
+			Element result = (Element)nl.item(i);
+			if( result.getAttribute("name").contentEquals("PATIENT_COUNT_XML") ) {
+				// found the patient count
+				count = Integer.parseInt(result.getTextContent().trim());
 			}
 		}
-		
+		return count;
 	}
 	/**
 	 * Calculate the total number of patients over all returned results / nodes
